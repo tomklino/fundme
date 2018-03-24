@@ -1,0 +1,14 @@
+{
+  "name": "fundme-server",
+  "version": "1.0.0",
+  "description": "Crowdfunding made for open-source",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha tests/*.test.js"
+  },
+  "author": "Tom Klinovsky <lutraman@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
