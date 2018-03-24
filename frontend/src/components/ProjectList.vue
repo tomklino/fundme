@@ -14,13 +14,14 @@
 <script>
 export default {
   name: 'ProjectList',
+  created() {
+    fetch('api/projects_list')
+      .then(response => response.json())
+      .then(data => this.projects = data)
+  },
   data () {
     return {
-      projects: [
-        {name: "imhere"},
-        {name: "frenchblog", onlineRepo: "https://github.com/tomklino/frenchblog"},
-        {name: "friendly", onlineRepo: "https://github.com/tomklino/friendly"}
-      ]
+      projects: []
     }
   }
 }
