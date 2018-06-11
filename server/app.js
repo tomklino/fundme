@@ -5,9 +5,9 @@ app = express();
 
 projects = [
   {name: "imhere"},
-  {name: "Tom's cheat sheets", onlineRepo: "https://github.com/tomklino/cheat-sheets"},
-  {name: "frenchblog", onlineRepo: "https://github.com/tomklino/frenchblog"},
-  {name: "friendly", onlineRepo: "https://github.com/tomklino/friendly"}
+  {name: "Tom's cheat sheets", online_repo: "https://github.com/tomklino/cheat-sheets"},
+  {name: "frenchblog", online_repo: "https://github.com/tomklino/frenchblog"},
+  {name: "friendly", online_repo: "https://github.com/tomklino/friendly"}
 ]
 
 app.get('/api/projects_list', function(req, res) {

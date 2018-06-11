@@ -2,7 +2,7 @@
   <ul>
     <li v-for="project in projects">
       <span>{{ project.name }}</span>
-      <span v-if="project.onlineRepo">
+      <span v-if="project.online_repo">
         <a v-bind:href=project.onlineRepo>
         <img src="../assets/git.svg">
       </a>
