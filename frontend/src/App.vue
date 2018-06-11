@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <ProjectList/>
+    <div id="center_bar">
+      <ProjectList/>
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,13 @@ export default {
 </script>
 
 <style>
+#center_bar {
+  max-width: 600px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
