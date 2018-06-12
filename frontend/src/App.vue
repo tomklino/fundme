@@ -2,25 +2,35 @@
   <div id="app">
     <img src="./assets/logo.png">
     <div id="center_bar">
-      <ProjectList/>
+      <!-- <ProjectList/> -->
+      <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox>
     </div>
   </div>
 </template>
 
 <script>
 import ProjectList from './components/ProjectList'
+import ProjectAboutBox from './components/ProjectAboutBox'
 
 export default {
   name: 'App',
+  data () {
+    return {
+      frenchblog: {
+        about: "hello, I am frenchblog"
+      }
+    }
+  },
   components: {
-    ProjectList
+    ProjectList,
+    ProjectAboutBox
   }
 }
 </script>
 
 <style>
 #center_bar {
-  max-width: 600px;
+  max-width: 975px;
   display: block;
   margin-left: auto;
   margin-right: auto;
