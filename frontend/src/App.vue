@@ -14,6 +14,11 @@ import ProjectAboutBox from './components/ProjectAboutBox'
 
 export default {
   name: 'App',
+  created() {
+    fetch('api/project/frenchblog/about')
+      .then(response => response.json())
+      .then(data => this.frenchblog.about = data.about)
+  },
   data () {
     return {
       frenchblog: {
