@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
-
-app = express();
+const fs = require('fs');
 
 projects = [
   {
@@ -33,6 +32,9 @@ function getProjectAboutText(project_id) {
   return `Hello, I am the about text for ${project_id}`
 }
 
+app = express();
+const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
+
 app.get('/api/projects_list', function(req, res) {
   res.send(projects);
 })
@@ -63,5 +65,18 @@ app.get('/api/project/:project_id/:properties', function(req, res) {
 })
 
 app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+
+app.get('/project/*', function(req, res) {
+  console.log("registering request for " + req.url)
+  fs.readFile(pathToIndexHtml, 'utf8', (err, html) => {
+    if(err) {
+      console.error(err.code);
+      res.status(500)
+        .send('whoops, some error')
+      return;
+    }
+    res.send(html)
+  })
+})
 
 app.listen(process.env['FUNDME_HTTP_PORT'] || 80)

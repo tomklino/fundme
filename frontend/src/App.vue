@@ -15,7 +15,11 @@ import ProjectAboutBox from './components/ProjectAboutBox'
 export default {
   name: 'App',
   created() {
-    fetch('api/project/frenchblog/about')
+    let url = new URL(window.location)
+    let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
+
+    // TODO: implement vue-router instead of this
+    fetch(`${hostname}/api/project/frenchblog/about`)
       .then(response => response.json())
       .then(data => this.frenchblog.about = data.about)
   },
