@@ -3,6 +3,7 @@
     <img src="./assets/logo.png">
     <div id="center_bar">
       <!-- <ProjectList/> -->
+      oh: {{this.$route.params.project_id}}
       <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox>
     </div>
   </div>
@@ -19,7 +20,8 @@ export default {
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
 
     // TODO: implement vue-router instead of this
-    fetch(`${hostname}/api/project/frenchblog/about`)
+    console.dir(this.$route.params)
+    fetch(`${hostname}/api/project/${this.$route.params.project_id}/about`)
       .then(response => response.json())
       .then(data => this.frenchblog.about = data.about)
   },
