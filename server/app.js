@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const mysql = require('mysql2/promise');
 
 projects = [
   {
@@ -23,6 +24,19 @@ projects = [
     online_repo: "https://github.com/tomklino/friendly"
   }
 ]
+
+const mysqlPool = mysql.createPool({
+  connectionLimit: 10,
+  host: process.env['MYSQL_HOSTNAME'],
+  user: process.env['MYSQL_USER'],
+  password: process.env['MYSQL_PASSWORD'],
+  database: process.env['MYSQL_DATABASE']
+})
+
+mysqlPool.query('select * from `Projects`')
+  .then(([rows, fields]) => {
+    console.log('query went fine...')
+})
 
 function isProjectExists(project_id) {
   return projects.some((project) => project.id === project_id)
