@@ -4,6 +4,8 @@ const CREATE_NEW_PROJECT_STATEMENT =
   "INSERT INTO `Projects` (project_id, name, online_repo) VALUES (?,?,?)"
 const QUERY_PROJECT_BY_ID =
   "SELECT * FROM `Projects` WHERE `project_id`=?"
+const QUERY_PROJECTS_BY_NAME =
+  "SELECT * FROM `Projects` WHERE `name` LIKE ?"
 
 function generateProjectId() {
   return "P-" + randomString.generate(7);
@@ -31,15 +33,32 @@ function projectHandlerFactory({
       return id;
     },
 
+    queryProjectsByName: async function({
+      name
+    }) {
+      var [rows, fields] = await mysqlConnectionPool.query(QUERY_PROJECTS_BY_NAME, [
+        "%" + name + "%"
+      ])
+      return rows.map(({project_id, name, online_repo}) => {
+        return {
+          id: project_id,
+          name,
+          online_repo
+        }
+      })
+    },
+
     queryProjectsById: async function({
       id
     }) {
       var [rows, fields] = await mysqlConnectionPool.query(QUERY_PROJECT_BY_ID, [id])
-      return {
-        id: rows[0].project_id,
-        name: rows[0].name,
-        online_repo: rows[0].online_repo
-      }
+      return rows.map(({project_id, name, online_repo}) => {
+        return {
+          id: project_id,
+          name,
+          online_repo
+        }
+      })
     }
   }
 }

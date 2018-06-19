@@ -46,30 +46,15 @@ const projectQueries = {
   projects: {
     type: new GraphQLList(ProjectType),
     args: {
-      id: { type: GraphQLString }
+      id: { type: GraphQLString },
+      name: { type: GraphQLString }
     },
-    resolve: (root, args, context) => {
-      const projects = [
-        {
-          id: 'imhere',
-          name: "imhere"
-        },
-        {
-          id: 'cheat_sheets',
-          name: "Tom's cheat sheets",
-          online_repo: "https://github.com/tomklino/cheat-sheets"
-        },
-        {
-          id: 'frenchblog',
-          name: "frenchblog",
-          online_repo: "https://github.com/tomklino/frenchblog"
-        },
-        {
-          id: 'friendly',
-          name: "friendly",
-          online_repo: "https://github.com/tomklino/friendly"
-        }
-      ]
+    resolve: async (root, args, context) => {
+      if (args.id) {
+        return await context.projectsHandler.queryProjectsById({id: args.id})
+      } else if(args.name) {
+        return await context.projectsHandler.queryProjectsByName({name: args.name})
+      }
       return args.id ?
           projects.filter(project => project.id === args.id) :
           projects;
