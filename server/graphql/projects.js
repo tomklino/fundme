@@ -28,14 +28,14 @@ const projectMutations = {
   createProject: {
     type: ProjectType,
     args: {
-      project_name: {
+      name: {
         type: new GraphQLNonNull(GraphQLString)
       },
       online_repo: {
         type: GraphQLString
       }
     },
-    resolve: (rootValue, { input }) => {
+    resolve: (rootValue, input) => {
       const result = Object.assign(input, {
         id: "kijjife-23878"
       })
