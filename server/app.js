@@ -3,10 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
+const projectsHandlerFactory = require('./project_modules/projects_handler.js');
 
 const schema = require('./graphql/projects.js');
 
-const mysqlPool = mysql.createPool({
+const mysqlConnectionPool = mysql.createPool({
   connectionLimit: 10,
   host: process.env['MYSQL_HOSTNAME'],
   user: process.env['MYSQL_USER'],
@@ -14,10 +15,12 @@ const mysqlPool = mysql.createPool({
   database: process.env['MYSQL_DATABASE']
 })
 
-mysqlPool.query('select * from `Projects`')
+mysqlConnectionPool.query('select * from `Projects`')
   .then(([rows, fields]) => {
-    console.log('query went fine...')
+    console.log(`query went fine. got ${rows.length} rows`)
 })
+
+const projectsHandler = projectsHandlerFactory({mysqlConnectionPool})
 
 app = express();
 
@@ -26,7 +29,8 @@ app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 
 app.use('/graphql', graphqlHTTP({
   schema,
-  graphiql: true
+  graphiql: true,
+  context: {projectsHandler}
 }))
 
 app.get('/project/*', function(req, res) {

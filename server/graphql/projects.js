@@ -35,11 +35,9 @@ const projectMutations = {
         type: GraphQLString
       }
     },
-    resolve: (rootValue, input) => {
-      const result = Object.assign(input, {
-        id: "kijjife-23878"
-      })
-      return result;
+    resolve: async (rootValue, {name, online_repo}, context) => {
+      var id = await context.projectsHandler.createNewProject({name, online_repo})
+      return await context.projectsHandler.queryProjectsById({id});
     }
   }
 }
