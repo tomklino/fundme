@@ -15,11 +15,6 @@ const mysqlConnectionPool = mysql.createPool({
   database: process.env['MYSQL_DATABASE']
 })
 
-mysqlConnectionPool.query('select * from `Projects`')
-  .then(([rows, fields]) => {
-    console.log(`query went fine. got ${rows.length} rows`)
-})
-
 const projectsHandler = projectsHandlerFactory({mysqlConnectionPool})
 
 app = express();
@@ -46,4 +41,17 @@ app.get('/project/*', function(req, res) {
   })
 })
 
-app.listen(process.env['FUNDME_HTTP_PORT'] || 80)
+async function checkAndStartServer(port) {
+  try {
+    let [rows] = await mysqlConnectionPool.query('select * from `Projects`')
+    console.log(`query to db went fine. got ${rows.length} rows`);
+  } catch(e) {
+    console.error(`error reaching database: ${e.code}. terminating.`)
+    process.exit(1);
+  }
+  app.listen(port, () => {
+    console.log(`server started, listening on port ${port}`)
+  })
+}
+
+checkAndStartServer(process.env['FUNDME_HTTP_PORT'] || 80)
