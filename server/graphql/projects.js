@@ -55,9 +55,7 @@ const projectQueries = {
       } else if(args.name) {
         return await context.projectsHandler.queryProjectsByName({name: args.name})
       }
-      return args.id ?
-          projects.filter(project => project.id === args.id) :
-          projects;
+      return []
     }
   }
 }
