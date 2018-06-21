@@ -1,14 +1,20 @@
 <template>
-  <ul>
-    <li v-for="project in projects">
-      <span>{{ project.name }}</span>
-      <span v-if="project.online_repo">
-        <a v-bind:href=project.online_repo>
-        <img src="../assets/git.svg">
-      </a>
-      </span>
-    </li>
-  </ul>
+  <div>
+    <form method="POST" @submit.prevent="searchProjects">
+      <input type="text" v-model="project_query" >
+      <input type="submit" value="Search"></input>
+    </form>
+    <ul>
+      <li v-for="project in projects">
+        <span>{{ project.name }}</span>
+        <span v-if="project.online_repo">
+          <a v-bind:href=project.online_repo>
+          <img src="../assets/git.svg">
+        </a>
+        </span>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -16,25 +22,24 @@ import { PROJECT_QUERY } from '@/graphql'
 
 export default {
   name: 'ProjectList',
-  // created() {
-  //   fetch('api/projects_list')
-  //     .then(response => response.json())
-  //     .then(data => this.projects = data)
-  // },
   data () {
     return {
-      project_query: "test",
+      project_query: "",
       projects: []
     }
   },
-  apollo: {
-    projects: {
-      query: PROJECT_QUERY,
-      variables () {
-        return {
+  methods: {
+    searchProjects(event) {
+      console.log(`name is ${this.project_query}`)
+      this.$apollo.query({
+        query: PROJECT_QUERY,
+        variables: {
           name: this.project_query
         }
-      }
+      }).then(({data}) => {
+        console.dir(data)
+        this.projects = data.projects
+      })
     }
   }
 }
