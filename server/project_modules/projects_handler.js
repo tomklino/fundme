@@ -11,6 +11,10 @@ function generateProjectId() {
   return "P-" + randomString.generate(7);
 }
 
+function getDebugLevel() {
+  return process.env["PROJECT_HANDLER_DEBUG"] || 0;
+}
+
 function projectHandlerFactory({
   mysqlConnectionPool
 }) {
@@ -24,6 +28,9 @@ function projectHandlerFactory({
       name,
       online_repo = null
     }) {
+      if(getDebugLevel() > 0) {
+        console.log(`DEBUG: project_handler: createNewProject called with name ${name}`)
+      }
       id = generateProjectId();
       await mysqlConnectionPool.execute(CREATE_NEW_PROJECT_STATEMENT, [
         id,
@@ -36,6 +43,9 @@ function projectHandlerFactory({
     queryProjectsByName: async function({
       name
     }) {
+      if(getDebugLevel() > 0) {
+        console.log(`DEBUG: project_handler: queryProjectsByName called with name ${name}`)
+      }
       var [rows] = await mysqlConnectionPool.query(QUERY_PROJECTS_BY_NAME, [
         "%" + name + "%"
       ])
@@ -51,6 +61,9 @@ function projectHandlerFactory({
     queryProjectsById: async function({
       id
     }) {
+      if(getDebugLevel() > 0) {
+        console.log(`DEBUG: project_handler: queryProjectsById called with id ${id}`)
+      }
       var [rows] = await mysqlConnectionPool.query(QUERY_PROJECT_BY_ID, [id])
       return rows.map(({project_id, name, online_repo}) => {
         return {
