@@ -36,7 +36,7 @@ function projectHandlerFactory({
     queryProjectsByName: async function({
       name
     }) {
-      var [rows, fields] = await mysqlConnectionPool.query(QUERY_PROJECTS_BY_NAME, [
+      var [rows] = await mysqlConnectionPool.query(QUERY_PROJECTS_BY_NAME, [
         "%" + name + "%"
       ])
       return rows.map(({project_id, name, online_repo}) => {
@@ -51,7 +51,7 @@ function projectHandlerFactory({
     queryProjectsById: async function({
       id
     }) {
-      var [rows, fields] = await mysqlConnectionPool.query(QUERY_PROJECT_BY_ID, [id])
+      var [rows] = await mysqlConnectionPool.query(QUERY_PROJECT_BY_ID, [id])
       return rows.map(({project_id, name, online_repo}) => {
         return {
           id: project_id,

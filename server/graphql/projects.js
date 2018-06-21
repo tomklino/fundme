@@ -26,7 +26,7 @@ const ProjectType = new GraphQLObjectType({
 
 const projectMutations = {
   createProject: {
-    type: ProjectType,
+    type: new GraphQLList(ProjectType),
     args: {
       name: {
         type: new GraphQLNonNull(GraphQLString)
@@ -37,7 +37,7 @@ const projectMutations = {
     },
     resolve: async (rootValue, {name, online_repo}, context) => {
       var id = await context.projectsHandler.createNewProject({name, online_repo})
-      return await context.projectsHandler.queryProjectsById({id});
+      return await context.projectsHandler.queryProjectsById({id})
     }
   }
 }
