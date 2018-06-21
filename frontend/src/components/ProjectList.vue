@@ -3,7 +3,7 @@
     <li v-for="project in projects">
       <span>{{ project.name }}</span>
       <span v-if="project.online_repo">
-        <a v-bind:href=project.onlineRepo>
+        <a v-bind:href=project.online_repo>
         <img src="../assets/git.svg">
       </a>
       </span>
@@ -12,16 +12,29 @@
 </template>
 
 <script>
+import { PROJECT_QUERY } from '@/graphql'
+
 export default {
   name: 'ProjectList',
-  created() {
-    fetch('api/projects_list')
-      .then(response => response.json())
-      .then(data => this.projects = data)
-  },
+  // created() {
+  //   fetch('api/projects_list')
+  //     .then(response => response.json())
+  //     .then(data => this.projects = data)
+  // },
   data () {
     return {
+      project_query: "test",
       projects: []
+    }
+  },
+  apollo: {
+    projects: {
+      query: PROJECT_QUERY,
+      variables () {
+        return {
+          name: this.project_query
+        }
+      }
     }
   }
 }

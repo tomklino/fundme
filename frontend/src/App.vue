@@ -2,9 +2,9 @@
   <div id="app">
     <img src="./assets/logo.png">
     <div id="center_bar">
-      <!-- <ProjectList/> -->
-      oh: {{this.$route.params.project_id}}
-      <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox>
+      <ProjectList/>
+      <!-- oh: {{this.$route.params.project_id}} -->
+      <!-- <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox> -->
     </div>
   </div>
 </template>
@@ -20,10 +20,10 @@ export default {
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
 
     // TODO: implement vue-router instead of this
-    console.dir(this.$route.params)
-    fetch(`${hostname}/api/project/${this.$route.params.project_id}/about`)
-      .then(response => response.json())
-      .then(data => this.frenchblog.about = data.about)
+    // console.dir(this.$route.params)
+    // fetch(`${hostname}/api/project/${this.$route.params.project_id}/about`)
+    //   .then(response => response.json())
+    //   .then(data => this.frenchblog.about = data.about)
   },
   data () {
     return {
