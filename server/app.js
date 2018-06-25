@@ -45,6 +45,7 @@ app.get('/project/*', function(req, res) {
 
 const cookieSecret =
   JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['cookie_secret']
+
 app.use(cookieSession({
   secret: cookieSecret,
   signed: true
@@ -59,8 +60,11 @@ app.use('/login/github_callback', githubLoginHandlerFactory({
   mysqlConnectionPool
 }))
 
-app.get('/user/whoami', function(req, res) {
-  return res.send(`your githib userid is ${req.session.github_userid}`)
+app.get('/whoami', function(req, res) {
+  return res.send({
+    logged_in: req.session.github_userid !== undefined,
+    github_userid: req.session.github_userid || ''
+  })
 })
 
 async function checkAndStartServer(port) {

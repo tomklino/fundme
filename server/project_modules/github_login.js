@@ -29,9 +29,11 @@ function githubLoginHandlerFactory({client_id, client_secret, mysqlConnectionPoo
         .set('Authorization', `token ${access_token}`)
         .set('Accept', 'application/json')
 
+      debug(1, `setting session.github_userid to ${githubUserResponse.body.id}`)
       req.session.github_userid = githubUserResponse.body.id;
-      res.send(githubUserResponse);
+      res.redirect('/');
     } catch(e) {
+      //TODO redirect to error page
       res.send(JSON.stringify(e))
     }
   }
