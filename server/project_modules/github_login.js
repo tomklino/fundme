@@ -31,6 +31,7 @@ function githubLoginHandlerFactory({client_id, client_secret, mysqlConnectionPoo
 
       debug(1, `setting session.github_userid to ${githubUserResponse.body.id}`)
       req.session.github_userid = githubUserResponse.body.id;
+      req.session.github_username = githubUserResponse.body.login;
       res.redirect('/');
     } catch(e) {
       //TODO redirect to error page

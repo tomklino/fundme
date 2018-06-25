@@ -63,7 +63,8 @@ app.use('/login/github_callback', githubLoginHandlerFactory({
 app.get('/whoami', function(req, res) {
   return res.send({
     logged_in: req.session.github_userid !== undefined,
-    github_userid: req.session.github_userid || ''
+    github_userid: req.session.github_userid || '',
+    github_username: req.session.github_username || ''
   })
 })
 
