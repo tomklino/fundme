@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
+const request = require('superagent');
 const projectsHandlerFactory = require('./project_modules/projects_handler.js');
 
 const schema = require('./graphql/projects.js');
@@ -39,6 +40,44 @@ app.get('/project/*', function(req, res) {
     }
     res.send(html)
   })
+})
+
+//TODO write this as a middleware
+const { githubClientID, githubClientSecret } =
+  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['github']
+
+app.get('/login/github_callback', function(req, res) {
+  const { query } = req;
+  const { code } = query;
+
+  if(!code) {
+    return res.send({
+      success: false,
+      message: 'Error: no code'
+    })
+  }
+
+  console.log('code', code);
+
+  request.post('https://github.com/login/oauth/access_token')
+    .send({
+      client_id: githubClientID,
+      client_secret: githubClientSecret,
+      code
+    })
+    .set('Accept', 'application/json')
+    .then(function(githubResponse) {
+      const data = githubResponse.body;
+      res.send({
+        success: true,
+        message: 'got a code',
+        data
+      })
+    })
+    .catch(function(githubResponse) {
+      res.send(githubResponse)
+    })
+
 })
 
 async function checkAndStartServer(port) {

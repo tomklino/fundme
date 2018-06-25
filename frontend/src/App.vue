@@ -2,7 +2,8 @@
   <div id="app">
     <img src="./assets/logo.png">
     <div id="center_bar">
-      <ProjectList/>
+      <SignInWithGithub/>
+      <!--<ProjectList/>-->
       <!-- oh: {{this.$route.params.project_id}} -->
       <!-- <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox> -->
     </div>
@@ -12,6 +13,7 @@
 <script>
 import ProjectList from './components/ProjectList'
 import ProjectAboutBox from './components/ProjectAboutBox'
+import SignInWithGithub from './components/SignInWithGithub'
 
 export default {
   name: 'App',
@@ -34,7 +36,8 @@ export default {
   },
   components: {
     ProjectList,
-    ProjectAboutBox
+    ProjectAboutBox,
+    SignInWithGithub
   }
 }
 </script>
