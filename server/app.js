@@ -5,6 +5,7 @@ const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
 const request = require('superagent');
 const projectsHandlerFactory = require('./project_modules/projects_handler.js');
+const cookieSession = require('cookie-session');
 
 const schema = require('./graphql/projects.js');
 
@@ -42,11 +43,18 @@ app.get('/project/*', function(req, res) {
   })
 })
 
+const cookieSecret =
+  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['cookie_secret']
+app.use(cookieSession({
+  secret: cookieSecret,
+  signed: true
+}))
+
 //TODO write this as a middleware
 const { githubClientID, githubClientSecret } =
   JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['github']
 
-app.get('/login/github_callback', function(req, res) {
+app.get('/login/github_callback', async function(req, res) {
   const { query } = req;
   const { code } = query;
 
@@ -59,25 +67,32 @@ app.get('/login/github_callback', function(req, res) {
 
   console.log('code', code);
 
-  request.post('https://github.com/login/oauth/access_token')
+  try {
+    const githubResponse =
+    await request.post('https://github.com/login/oauth/access_token')
     .send({
       client_id: githubClientID,
       client_secret: githubClientSecret,
       code
     })
     .set('Accept', 'application/json')
-    .then(function(githubResponse) {
-      const data = githubResponse.body;
-      res.send({
-        success: true,
-        message: 'got a code',
-        data
-      })
-    })
-    .catch(function(githubResponse) {
-      res.send(githubResponse)
-    })
 
+    const accessToken = githubResponse.body['access_token']
+    console.log(`accessToken is ${accessToken}`)
+    const githubUserResponse =
+    await request.get('https://api.github.com/user')
+      .set('Authorization', `token ${accessToken}`)
+      .set('Accept', 'application/json')
+
+    req.session.github_userid = githubUserResponse.body.id;
+    res.send(githubUserResponse);
+  } catch(e) {
+    res.send(JSON.stringify(e))
+  }
+})
+
+app.get('/user/whoami', function(req, res) {
+  return res.send(`your githib userid is ${req.session.github_userid}`)
 })
 
 async function checkAndStartServer(port) {
