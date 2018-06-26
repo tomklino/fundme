@@ -10,7 +10,8 @@ export FUNDME_HTTP_PORT=3000
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-$(exec $DIR/dev-server-cleanup.sh)
+$(echo $DIR/mysql/rebuild-docker.sh);
+$(echo $DIR/dev-server-cleanup.sh);
 
 docker run --name $MYSQL_DOCKER_NAME -e MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD -d $MYSQL_DOCKER_IMAGE 2>&1 >/dev/null
 
