@@ -40,7 +40,7 @@ function projectHandlerFactory({
         ])
       } catch(e) {
         console.error("ERROR: project_handler.js: " + e.code)
-        return e;
+        throw e;
       }
       return id;
     },

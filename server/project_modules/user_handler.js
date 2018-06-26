@@ -8,9 +8,9 @@ const QUERY_USER_BY_GITHUB_ID =
 const CREATE_NEW_USER_STATEMENT =
   "INSERT INTO `Users` (user_id, github_id, github_login, github_access_token) VALUES (?,?,?,?)"
 
-  function generateUserId() {
-    return "U-" + randomString.generate(7);
-  }
+function generateUserId() {
+  return "U-" + randomString.generate(7);
+}
 
 function userHandlerFactory({ mysqlConnectionPool }) {
   async function isUserIdExists({ user_id }) {
@@ -26,7 +26,6 @@ function userHandlerFactory({ mysqlConnectionPool }) {
       debug(1, "cannot create user: github_id exists")
       throw new Error("github id exists already");
     }
-
 
     const user_id = generateUserId();
     debug(1, "creating a user with the following arguments: ",
