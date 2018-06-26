@@ -10,4 +10,4 @@ CREATE TABLE IF NOT EXISTS `Projects` (
 CREATE TABLE IF NOT EXISTS `Users` (
   `user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `github_id` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL
-)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
