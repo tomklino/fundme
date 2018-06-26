@@ -4,11 +4,12 @@
   "description": "Crowdfunding made for open-source",
   "main": "app.js",
   "scripts": {
-    "test": "mocha tests/*.test.js"
+    "test": "mocha tests/*.spec.js"
   },
   "author": "Tom Klinovsky <lutraman@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "chai": "^4.1.2",
     "cookie-session": "^2.0.0-beta.3",
     "express": "^4.16.3",
     "express-graphql": "^0.6.12",
