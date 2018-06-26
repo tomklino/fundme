@@ -3,7 +3,7 @@ const debug = require('nice_debug')("GITHUB_LOGIN_DEBUG");
 
 module.exports = githubLoginHandlerFactory;
 
-function githubLoginHandlerFactory({client_id, client_secret, mysqlConnectionPool}) {
+function githubLoginHandlerFactory({ client_id, client_secret, userHandler }) {
   return async function githubLoginHandler(req, res, next) {
     const { code } = req.query;
 
@@ -18,16 +18,29 @@ function githubLoginHandlerFactory({client_id, client_secret, mysqlConnectionPoo
 
     try {
       const githubResponse =
-      await request.post('https://github.com/login/oauth/access_token')
-        .send({ client_id, client_secret, code })
-        .set('Accept', 'application/json')
+        await request.post('https://github.com/login/oauth/access_token')
+          .send({ client_id, client_secret, code })
+          .set('Accept', 'application/json')
 
       const { access_token } = githubResponse.body
       debug(1, `accessToken is ${access_token}`)
       const githubUserResponse =
-      await request.get('https://api.github.com/user')
-        .set('Authorization', `token ${access_token}`)
-        .set('Accept', 'application/json')
+        await request.get('https://api.github.com/user')
+          .set('Authorization', `token ${access_token}`)
+          .set('Accept', 'application/json')
+
+      userHandler.createUser({
+        github_id: githubUserResponse.body.id,
+        github_login: githubUserResponse.body.login,
+        github_access_token: access_token
+      }).catch((e) => {
+        if( e.code === "ERROR_USER_EXIST" ) {
+          //TODO in this case, update the access token
+          console.log("user that logged in already exists, skipping creation")
+        } else {
+          throw e;
+        }
+      })
 
       debug(1, `setting session.github_userid to ${githubUserResponse.body.id}`)
       req.session.github_userid = githubUserResponse.body.id;

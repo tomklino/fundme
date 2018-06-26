@@ -6,6 +6,7 @@ const graphqlHTTP = require('express-graphql');
 const cookieSession = require('cookie-session');
 
 const projectsHandlerFactory = require('./project_modules/projects_handler.js');
+const userHandlerFactory = require('./project_modules/user_handler.js');
 const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const schema = require('./graphql/projects.js');
 
@@ -18,10 +19,10 @@ const mysqlConnectionPool = mysql.createPool({
   user: process.env['MYSQL_USER'],
   password: process.env['MYSQL_PASSWORD'],
   database: process.env['MYSQL_DATABASE']
-})
+});
 
-const projectsHandler = projectsHandlerFactory({mysqlConnectionPool})
-
+const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
+const userHandler = userHandlerFactory({ mysqlConnectionPool });
 app = express();
 
 const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
@@ -54,7 +55,7 @@ app.use(cookieSession({
 app.use('/login/github_callback', githubLoginHandlerFactory({
   client_id: secretSettings['github'].client_id,
   client_secret: secretSettings['github'].client_secret,
-  mysqlConnectionPool
+  userHandler
 }))
 
 app.get('/whoami', function(req, res) {
