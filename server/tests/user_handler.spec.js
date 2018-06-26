@@ -49,9 +49,33 @@ describe("tests the user_handler", () => {
   })
 
   it("reutrn null when searching for a github_id that does not exist", (done) => {
-    userHandler.findUserByGithubId({ github_userid: "63881565" })
+    userHandler.findUserByGithubId({ github_id: "63881565" })
       .then((result) => {
         expect(result).to.be.null;
+        done();
+      })
+  })
+
+  it("return a user object when a user if found by id", (done) => {
+    userHandler.findUserById({ user_id: "U-JFCCkIo" })
+      .then((result) => {
+        expect(result).not.to.be.null;
+        expect(result.user_id).to.be.a('string');
+        expect(result.github_id).to.be.a('string');
+        expect(result.github_login).to.be.a('string');
+        expect(result.github_access_token).to.be.a('string');
+        done();
+      })
+  })
+
+  it("return a user object when a user if found by id", (done) => {
+    userHandler.findUserByGithubId({ github_id: "67788773" })
+      .then((result) => {
+        expect(result).not.to.be.null;
+        expect(result.user_id).to.be.a('string');
+        expect(result.github_id).to.be.a('string');
+        expect(result.github_login).to.be.a('string');
+        expect(result.github_access_token).to.be.a('string');
         done();
       })
   })
