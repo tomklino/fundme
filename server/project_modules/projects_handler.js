@@ -32,11 +32,16 @@ function projectHandlerFactory({
         console.log(`DEBUG: project_handler: createNewProject called with name ${name}`)
       }
       id = generateProjectId();
-      await mysqlConnectionPool.execute(CREATE_NEW_PROJECT_STATEMENT, [
-        id,
-        name,
-        online_repo
-      ])
+      try {
+        await mysqlConnectionPool.execute(CREATE_NEW_PROJECT_STATEMENT, [
+          id,
+          name,
+          online_repo
+        ])
+      } catch(e) {
+        console.error("ERROR: project_handler.js: " + e.code)
+        return e;
+      }
       return id;
     },
 

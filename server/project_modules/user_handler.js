@@ -5,17 +5,45 @@ const QUERY_USER_BY_ID =
   "SELECT * FROM `Users` WHERE `user_id`=?"
 const QUERY_USER_BY_GITHUB_ID =
   "SELECT * FROM `Users` WHERE `github_id`=?"
+const CREATE_NEW_USER_STATEMENT =
+  "INSERT INTO `Users` (user_id, github_id, github_login, github_access_token) VALUES (?,?,?,?)"
+
+  function generateUserId() {
+    return "U-" + randomString.generate(7);
+  }
 
 function userHandlerFactory({ mysqlConnectionPool }) {
   async function isUserIdExists({ user_id }) {
-    if( (await findUserById({ user_id })) === null ) {
-      return false;
-    }
-    return true;
+    return ( (await findUserById({ user_id })) !== null )
   }
 
-  async function createUser({ user_id, github_id, github_login, github_access_token }) {
+  async function isGitHubIdExists({ github_id }) {
+    return ( (await findUserByGithubId({ github_id })) !== null )
+  }
 
+  async function createUser({ github_id, github_login, github_access_token }) {
+    if ( (await isGitHubIdExists({ github_id })) ) {
+      debug(1, "cannot create user: github_id exists")
+      throw new Error("github id exists already");
+    }
+
+
+    const user_id = generateUserId();
+    debug(1, "creating a user with the following arguments: ",
+      user_id, github_id, github_login, github_access_token);
+
+    try {
+      await mysqlConnectionPool.execute(CREATE_NEW_USER_STATEMENT, [
+        user_id,
+        github_id,
+        github_login,
+        github_access_token
+      ])
+    } catch(e) {
+      return e;
+    }
+
+    return user_id;
   }
 
   async function findUserById({ user_id }) {
