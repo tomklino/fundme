@@ -24,7 +24,9 @@ function userHandlerFactory({ mysqlConnectionPool }) {
   async function createUser({ github_id, github_login, github_access_token }) {
     if ( (await isGitHubIdExists({ github_id })) ) {
       debug(1, "cannot create user: github_id exists")
-      throw new Error("github id exists already");
+      const error = new Error("github id exists already");
+      error.code = "ERROR_USER_EXIST"
+      throw error;
     }
 
     const user_id = generateUserId();

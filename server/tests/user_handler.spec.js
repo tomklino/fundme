@@ -99,6 +99,7 @@ describe("tests the user_handler", () => {
     }).then((result) => {
       done("returned a result instead of an error")
     }).catch((error) => {
+      expect(error.code).to.equal("ERROR_USER_EXIST");
       done();
     })
   })
