@@ -9,6 +9,9 @@ const projectsHandlerFactory = require('./project_modules/projects_handler.js');
 const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const schema = require('./graphql/projects.js');
 
+const secretSettings =
+  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'));
+
 const mysqlConnectionPool = mysql.createPool({
   connectionLimit: 10,
   host: process.env['MYSQL_HOSTNAME'],
@@ -43,20 +46,14 @@ app.get('/project/*', function(req, res) {
   })
 })
 
-const cookieSecret =
-  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['cookie_secret']
-
 app.use(cookieSession({
-  secret: cookieSecret,
+  secret: secretSettings['cookie_secret'],
   signed: true
 }))
 
-const githubSecrets =
-  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'))['github']
-
 app.use('/login/github_callback', githubLoginHandlerFactory({
-  client_id: githubSecrets.client_id,
-  client_secret: githubSecrets.client_secret,
+  client_id: secretSettings['github'].client_id,
+  client_secret: secretSettings['github'].client_secret,
   mysqlConnectionPool
 }))
 

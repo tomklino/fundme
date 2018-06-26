@@ -19,8 +19,8 @@ function githubLoginHandlerFactory({client_id, client_secret, mysqlConnectionPoo
     try {
       const githubResponse =
       await request.post('https://github.com/login/oauth/access_token')
-      .send({ client_id, client_secret, code })
-      .set('Accept', 'application/json')
+        .send({ client_id, client_secret, code })
+        .set('Accept', 'application/json')
 
       const { access_token } = githubResponse.body
       debug(1, `accessToken is ${access_token}`)
