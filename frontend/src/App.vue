@@ -1,13 +1,36 @@
 <template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <div id="center_bar">
-      <SignInWithGithub/>
-      <!--<ProjectList/>-->
-      <!-- oh: {{this.$route.params.project_id}} -->
-      <!-- <ProjectAboutBox v-bind:project="frenchblog"></ProjectAboutBox> -->
-    </div>
-  </div>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      fixed
+      app
+    >
+      <v-list dense>
+        <v-list-tile @click="">
+          <v-list-tile-action>
+            <v-icon>explore</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Home</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar color="indigo" dark fixed app>
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <v-toolbar-title>Application</v-toolbar-title>
+    </v-toolbar>
+    <v-content>
+      <v-container fluid fill-height>
+        <v-layout>
+        <router-view></router-view>
+        </v-layout>
+      </v-container>
+    </v-content>
+    <v-footer color="indigo" app>
+      <span class="white--text">&copy; 2017</span>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
@@ -20,19 +43,15 @@ export default {
   created() {
     let url = new URL(window.location)
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
-
-    // TODO: implement vue-router instead of this
-    // console.dir(this.$route.params)
-    // fetch(`${hostname}/api/project/${this.$route.params.project_id}/about`)
-    //   .then(response => response.json())
-    //   .then(data => this.frenchblog.about = data.about)
   },
   data () {
     return {
-      frenchblog: {
-        about: "hello, I am frenchblog"
-      }
+      frenchblog: {},
+      drawer: true
     }
+  },
+  props: {
+    source: String
   },
   components: {
     ProjectList,
