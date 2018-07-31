@@ -21,7 +21,7 @@
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat=true><img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">Login with GitHub</v-btn>
+        <SignInWithGithub />
       </v-toolbar-items>
     </v-toolbar>
     <v-content>

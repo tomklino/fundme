@@ -1,5 +1,12 @@
 <template>
-  <div>
+    <v-btn
+      flat=true href="https://github.com/login/oauth/authorize?client_id=5c6f1bd40f1841f1674a">
+      <img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">
+      <span v-if="show_login_button">Login with GitHub</span>
+      <v-progress-circular v-if="!show_login_button && github_username === null" indeterminate />
+      <span v-if="!show_login_button && github_username !== null">{{github_username}}</span>
+    </v-btn>
+    <!--
     <a
       v-if="show_login_button"
       href="https://github.com/login/oauth/authorize?client_id=5c6f1bd40f1841f1674a"
@@ -7,7 +14,7 @@
     </a>
     <span v-if="!show_login_button && github_username === null">Loading...</span>
     <span v-if="!show_login_button && github_username !== null">{{github_username}}</span>
-  </div>
+  -->
 </template>
 
 <script>
