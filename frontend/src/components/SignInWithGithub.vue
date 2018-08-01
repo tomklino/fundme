@@ -1,6 +1,6 @@
 <template>
     <v-btn
-      flat=true v-bind:href=github_login_link>
+      flat v-bind:href=github_login_link>
       <!-- FIXME: image not showing up -->
       <img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">
       <span v-if="show_login_button">Login with GitHub</span>
