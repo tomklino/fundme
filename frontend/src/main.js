@@ -10,6 +10,7 @@ import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 
 import App from './App'
+import AddProject from '@/components/AddProject.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -18,7 +19,21 @@ Vue.use(VueRouter)
 const router = new VueRouter({
   mode: 'history',
   routes: [
-    { path: '/project/:project_id', component: App }
+    {
+      path: '/',
+      name: 'landing',
+      component: App
+    },
+    {
+      path: '/addproject',
+      name: 'Add Project',
+      component: AddProject
+    },
+    {
+      path: '/project/:project_id',
+      name: 'projects',
+      component: App
+    }
   ]
 })
 
