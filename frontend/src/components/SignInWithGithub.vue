@@ -5,7 +5,7 @@
       <img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">
       <span v-if="show_login_button">Login with GitHub</span>
       <v-progress-circular v-if="!show_login_button && github_username === null" indeterminate />
-      <span v-if="!show_login_button && username_object !== null">{{username_object}}</span>
+      <span v-if="!show_login_button && github_username !== null">{{github_username}}</span>
     </v-btn>
 </template>
 
@@ -13,11 +13,10 @@
   export default {
     name: 'SignInWithGithub',
     mounted () {
-      this.checkLogin()
+      this.checkLogin();
     },
     props: [
       'github_clientid',
-      'username_object'
     ],
     methods: {
       checkLogin: function() {
@@ -28,7 +27,8 @@
               this.show_login_button = false;
               this.github_login_link = null;
               this.github_userid = github_userid;
-              this.username_object = github_username;
+              this.github_username = github_username;
+              this.$emit('user-signed-in', github_username);
             } else {
               this.show_login_button = true;
             }
@@ -40,6 +40,7 @@
         github_login_link: `https://github.com/login/oauth/authorize?client_id=${this.github_clientid}`,
         show_login_button: false,
         github_userid: null,
+        github_username: null
       }
     }
   }

@@ -13,12 +13,13 @@
         </v-btn>
         <SignInWithGithub
           github_clientid="5c6f1bd40f1841f1674a"
-          v-bind:username_object="username_object"/>
+          v-on:user-signed-in="onUserSignin"/>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-layout>
+          username is: {{username}}
         <router-view></router-view>
         </v-layout>
       </v-container>
@@ -40,9 +41,15 @@ export default {
     let url = new URL(window.location)
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
   },
+  methods: {
+    onUserSignin: function(new_username) {
+      console.log("onUserSignin", new_username)
+      this.username = new_username;
+    }
+  },
   data () {
     return {
-      username_object: null,
+      username: null,
       frenchblog: {},
       drawer: true
     }
