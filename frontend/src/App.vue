@@ -5,7 +5,8 @@
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn flat :to=" { name: 'Add_Project' }">
+        <v-btn v-if="username"
+          flat :to=" { name: 'Add_Project' }">
           <v-icon>add_circle</v-icon>
         </v-btn>
         <v-btn flat :to=" { name: 'landing' }">
@@ -19,7 +20,6 @@
     <v-content>
       <v-container fluid fill-height>
         <v-layout>
-          username is: {{username}}
         <router-view></router-view>
         </v-layout>
       </v-container>
