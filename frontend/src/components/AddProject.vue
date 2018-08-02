@@ -4,12 +4,12 @@
     <v-list two-line>
       <v-list-tile
         v-for="(project, index) in projects"
-        :key="project.title"
+        :key="project.name"
         avatar
-        @click="dialog = true; project_to_add = project.title"
+        @click="dialog = true; project_to_add = project.name"
       >
         <v-list-tile-content>
-          <v-list-tile-title v-html="project.title"></v-list-tile-title>
+          <v-list-tile-title v-html="project.name"></v-list-tile-title>
           <v-list-tile-sub-title v-html="project.description"></v-list-tile-sub-title>
         </v-list-tile-content>
       </v-list-tile>
@@ -50,9 +50,19 @@
 <script>
 export default {
   name: 'AddProject',
+  mounted() {
+    if(!this.$root.$data.username) {
+      console.error("no user is signed in. page cannot render without a username");
+      //TODO redirect back to home
+      return null;
+    }
+    this.fetchRepositories(this.$root.$data.username);
+  },
   methods: {
-    fetchRepositories: function() {
-
+    fetchRepositories: function(github_username) {
+      fetch(`https://api.github.com/users/${github_username}/repos`)
+        .then(res => res.json())
+        .then(data => this.projects = data)
     }
   },
   data () {
