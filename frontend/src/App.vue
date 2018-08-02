@@ -1,26 +1,16 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      app
-    >
-      <v-list dense>
-        <v-list-tile @click="">
-          <v-list-tile-action>
-            <v-icon>explore</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Home</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-navigation-drawer>
     <v-toolbar color="indigo" dark fixed app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>Application</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
+        <v-btn flat :to=" { name: 'Add_Project' }">
+          <v-icon>add_circle</v-icon>
+        </v-btn>
+        <v-btn flat :to=" { name: 'landing' }">
+          <v-icon>home</v-icon>
+        </v-btn>
         <SignInWithGithub />
       </v-toolbar-items>
     </v-toolbar>
