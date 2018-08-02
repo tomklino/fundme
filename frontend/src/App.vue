@@ -11,7 +11,9 @@
         <v-btn flat :to=" { name: 'landing' }">
           <v-icon>home</v-icon>
         </v-btn>
-        <SignInWithGithub />
+        <SignInWithGithub
+          github_clientid="5c6f1bd40f1841f1674a"
+          v-bind:username_object="username_object"/>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -40,6 +42,7 @@ export default {
   },
   data () {
     return {
+      username_object: null,
       frenchblog: {},
       drawer: true
     }
@@ -48,8 +51,8 @@ export default {
     source: String
   },
   components: {
-    ProjectList,
-    ProjectAboutBox,
+    ProjectList, //TODO remove
+    ProjectAboutBox, //TODO remove
     SignInWithGithub
   }
 }

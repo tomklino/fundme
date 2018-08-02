@@ -1,11 +1,11 @@
 <template>
     <v-btn
       flat v-bind:href=github_login_link>
-      <!-- FIXME: image not showing up -->
+      <!-- FIXME: image not showing up on firefox -->
       <img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">
       <span v-if="show_login_button">Login with GitHub</span>
       <v-progress-circular v-if="!show_login_button && github_username === null" indeterminate />
-      <span v-if="!show_login_button && github_username !== null">{{github_username}}</span>
+      <span v-if="!show_login_button && username_object !== null">{{username_object}}</span>
     </v-btn>
 </template>
 
@@ -15,6 +15,10 @@
     mounted () {
       this.checkLogin()
     },
+    props: [
+      'github_clientid',
+      'username_object'
+    ],
     methods: {
       checkLogin: function() {
         fetch('/whoami', {credentials: 'same-origin'})
@@ -24,7 +28,7 @@
               this.show_login_button = false;
               this.github_login_link = null;
               this.github_userid = github_userid;
-              this.github_username = github_username;
+              this.username_object = github_username;
             } else {
               this.show_login_button = true;
             }
@@ -33,10 +37,9 @@
     },
     data () {
       return {
-        github_login_link: "https://github.com/login/oauth/authorize?client_id=5c6f1bd40f1841f1674a",
+        github_login_link: `https://github.com/login/oauth/authorize?client_id=${this.github_clientid}`,
         show_login_button: false,
         github_userid: null,
-        github_username: null
       }
     }
   }
