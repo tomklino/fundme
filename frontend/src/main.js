@@ -56,9 +56,14 @@ const apolloProvider = new VueApollo({
 
 Vue.use(Vuetify)
 
+const sourceOfTruth = {
+  username: null
+}
+
 new Vue({
   el: '#app',
   router,
+  data: sourceOfTruth,
   provide: apolloProvider.provide(),
   components: { App },
   template: '<App/>'

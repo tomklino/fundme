@@ -4,7 +4,7 @@
       <v-toolbar-title>Voost.io</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
-        <v-btn v-if="username"
+        <v-btn v-if="$root.$data.username"
           flat :to=" { name: 'Add_Project' }">
           <v-icon>add_circle</v-icon>
         </v-btn>
@@ -42,7 +42,7 @@ export default {
   },
   methods: {
     onUserSignin: function(new_username) {
-      this.username = new_username;
+      this.$root.$data.username = new_username;
     }
   },
   data () {

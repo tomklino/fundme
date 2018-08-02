@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Choose a project to add to voost</h1>
+    <h1>Hi {{this.$root.$data.username}} Choose a project to add to voost</h1>
     <v-list two-line>
       <v-list-tile
         v-for="(project, index) in projects"
@@ -51,26 +51,15 @@
 export default {
   name: 'AddProject',
   methods: {
+    fetchRepositories: function() {
 
+    }
   },
   data () {
     return {
       dialog: false,
       project_to_add: null,
-      projects: [
-        {
-          title: "fundme",
-          description: "boosting opensource software"
-        },
-        {
-          title: "friendly",
-          description: "cpu intensive algorithm written in many languages"
-        },
-        {
-          title: "cheat-sheet",
-          description: "cheat sheets for all intents and purposes"
-        }
-      ]
+      projects: null
     }
   }
 }
