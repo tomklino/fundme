@@ -26,6 +26,7 @@ const userHandler = userHandlerFactory({ mysqlConnectionPool });
 app = express();
 
 const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
+const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
 app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 
 app.use('/graphql', graphqlHTTP({
@@ -34,17 +35,8 @@ app.use('/graphql', graphqlHTTP({
   context: {projectsHandler}
 }))
 
-app.get('/project/*', function(req, res) {
-  console.log("registering request for " + req.url)
-  fs.readFile(pathToIndexHtml, 'utf8', (err, html) => {
-    if(err) {
-      console.error(err.code);
-      res.status(500)
-        .send('whoops, some error')
-      return;
-    }
-    res.send(html)
-  })
+app.get(['/project/*', '/addproject'], function(req, res) {
+  res.send(indexHtml)
 })
 
 app.use(cookieSession({
