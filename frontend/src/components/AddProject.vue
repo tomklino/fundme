@@ -37,7 +37,7 @@
             <v-btn
               color="green darken-1"
               flat="flat"
-              @click="dialog = false"
+              @click="dialog = false; addProject(project_to_add, $root.$data.username)"
             >
               yes
             </v-btn>
@@ -48,6 +48,8 @@
 </template>
 
 <script>
+import gql from 'graphql-tag'
+
 export default {
   name: 'AddProject',
   mounted() {
@@ -59,6 +61,21 @@ export default {
     this.fetchRepositories(this.$root.$data.username);
   },
   methods: {
+    addProject: function(project_name, username) {
+      console.log("Adding project", project_name)
+      this.$apollo.mutate({
+        mutation: gql`mutation ($project_name: String!, $username: String!) {
+          addProject(project_name: $project_name, username: $username) {
+            id
+          }
+        }`,
+        variables: {
+          project_name, username
+        }
+      }).then((data) => {
+        console.log("added project, here is the data", data)
+      })
+    },
     fetchRepositories: function(github_username) {
       fetch(`https://api.github.com/users/${github_username}/repos`)
         .then(res => res.json())
