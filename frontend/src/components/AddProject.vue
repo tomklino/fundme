@@ -61,16 +61,16 @@ export default {
     this.fetchRepositories(this.$root.$data.username);
   },
   methods: {
-    addProject: function(project_name, username) {
-      console.log("Adding project", project_name)
+    addProject: function(name, username) {
+      console.log("Adding project", name)
       this.$apollo.mutate({
-        mutation: gql`mutation ($project_name: String!, $username: String!) {
-          addProject(project_name: $project_name, username: $username) {
+        mutation: gql`mutation ($name: String!, $username: String!) {
+          addProject(name: $name, username: $username) {
             id
           }
         }`,
         variables: {
-          project_name, username
+          name, username
         }
       }).then((data) => {
         console.log("added project, here is the data", data)
