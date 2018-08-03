@@ -56,8 +56,6 @@ export default {
     source: String
   },
   components: {
-    ProjectList, //TODO remove
-    ProjectAboutBox, //TODO remove
     SignInWithGithub
   }
 }
