@@ -8,7 +8,7 @@ const {
   GraphQLSchema
 } = require('graphql');
 
-//TODO add nice debug
+const debug = require('nice_debug')("PROJECTS_DEBUG")
 
 const ProjectType = new GraphQLObjectType({
   name: 'ProjectType',
@@ -38,9 +38,8 @@ const projectMutations = {
       }
     },
     resolve: async (rootValue, {name, username}, context) => {
-      //TODO replace with debug(1)
-      console.log(require('util').inspect(context, { depth: null }));
-      console.log("addProject mutations starting...", name, username)
+      debug(2, require('util').inspect(context, { depth: null }));
+      debug(1, "addProject mutations starting...", name, username)
       if(context.session.github_username !== username) {
         console.error("username mismatch while trying to add project")
         return
