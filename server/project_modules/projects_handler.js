@@ -26,12 +26,13 @@ function projectHandlerFactory({
     //TODO implement mechanism to prevent projects with the same name
     createNewProject: async function({
       name,
-      online_repo = null
+      username
     }) {
       if(getDebugLevel() > 0) {
         console.log(`DEBUG: project_handler: createNewProject called with name ${name}`)
       }
       id = generateProjectId();
+      let online_repo = `https://www.github.com/${username}/${name}`
       try {
         await mysqlConnectionPool.execute(CREATE_NEW_PROJECT_STATEMENT, [
           id,

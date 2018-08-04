@@ -29,20 +29,26 @@ const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
 const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
 app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 
-app.use('/graphql', graphqlHTTP({
-  schema,
-  graphiql: true,
-  context: {projectsHandler}
+app.use(cookieSession({
+  secret: secretSettings['cookie_secret'],
+  signed: true
+}))
+
+app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
+
+  return {
+    schema,
+    graphiql: true,
+    context: {
+      session: request.session,
+      projectsHandler
+    }
+  }
 }))
 
 app.get(['/project/*', '/addproject'], function(req, res) {
   res.send(indexHtml)
 })
-
-app.use(cookieSession({
-  secret: secretSettings['cookie_secret'],
-  signed: true
-}))
 
 app.use('/login/github_callback', githubLoginHandlerFactory({
   client_id: secretSettings['github'].client_id,

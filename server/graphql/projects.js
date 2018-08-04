@@ -8,6 +8,8 @@ const {
   GraphQLSchema
 } = require('graphql');
 
+//TODO add nice debug
+
 const ProjectType = new GraphQLObjectType({
   name: 'ProjectType',
   description: 'Project type definition',
@@ -25,18 +27,25 @@ const ProjectType = new GraphQLObjectType({
 });
 
 const projectMutations = {
-  createProject: {
+  addProject: {
     type: new GraphQLList(ProjectType),
     args: {
       name: {
         type: new GraphQLNonNull(GraphQLString)
       },
-      online_repo: {
-        type: GraphQLString
+      username: {
+        type: new GraphQLNonNull(GraphQLString)
       }
     },
-    resolve: async (rootValue, {name, online_repo}, context) => {
-      var id = await context.projectsHandler.createNewProject({name, online_repo})
+    resolve: async (rootValue, {name, username}, context) => {
+      //TODO replace with debug(1)
+      console.log(require('util').inspect(context, { depth: null }));
+      console.log("addProject mutations starting...", name, username)
+      if(context.session.github_username !== username) {
+        console.error("username mismatch while trying to add project")
+        return
+      }
+      var id = await context.projectsHandler.createNewProject({name, username})
       return await context.projectsHandler.queryProjectsById({id})
     }
   }
