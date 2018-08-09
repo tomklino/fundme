@@ -29,25 +29,34 @@ function githubLoginHandlerFactory({ client_id, client_secret, userHandler }) {
           .set('Authorization', `token ${access_token}`)
           .set('Accept', 'application/json')
 
-      userHandler.createUser({
+      let user_id = await userHandler.createUser({
         github_id: githubUserResponse.body.id,
         github_login: githubUserResponse.body.login,
         github_access_token: access_token
       }).catch((e) => {
         if( e.code === "ERROR_USER_EXIST" ) {
           //TODO in this case, update the access token
-          console.log("user that logged in already exists, skipping creation")
+          debug(1, "user that logged in already exists, skipping creation")
         } else {
           throw e;
         }
       })
-
+      debug(2, require('util').inspect(user_id, { depth: null }))
+      if(!user_id) {
+        debug(1, "user_id not defined by creation, looking up existing one")
+        user_id = await userHandler.findUserByGithubId({
+          github_id: githubUserResponse.body.id
+        })
+        debug(2, require('util').inspect(user_id, { depth: null }))
+      }
       debug(1, `setting session.github_userid to ${githubUserResponse.body.id}`)
       req.session.github_userid = githubUserResponse.body.id;
       req.session.github_username = githubUserResponse.body.login;
+      req.session.user_id = user_id;
       res.redirect('/');
     } catch(e) {
       //TODO redirect to error page
+      debug(1, require('util').inspect(e, { depth: null }))
       res.send(JSON.stringify(e))
     }
   }

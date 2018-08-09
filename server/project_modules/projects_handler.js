@@ -2,7 +2,7 @@ const randomString = require('randomstring')
 const debug = require('nice_debug')("PROJECT_HANDLER_DEBUG")
 
 const CREATE_NEW_PROJECT_STATEMENT =
-  "INSERT INTO `Projects` (project_id, name, online_repo) VALUES (?,?,?)"
+  "INSERT INTO `Projects` (project_id, name, online_repo, user_id) VALUES (?,?,?,?)"
 const QUERY_PROJECT_BY_ID =
   "SELECT * FROM `Projects` WHERE `project_id`=?"
 const QUERY_PROJECTS_BY_NAME =
@@ -23,7 +23,8 @@ function projectHandlerFactory({
     //TODO implement mechanism to prevent projects with the same name
     createNewProject: async function({
       name,
-      username
+      username,
+      user_id
     }) {
       debug(1, `createNewProject called with name ${name}`)
       id = generateProjectId();
@@ -32,7 +33,8 @@ function projectHandlerFactory({
         await mysqlConnectionPool.execute(CREATE_NEW_PROJECT_STATEMENT, [
           id,
           name,
-          online_repo
+          online_repo,
+          user_id
         ])
       } catch(e) {
         console.error("ERROR: project_handler.js: " + e.code)

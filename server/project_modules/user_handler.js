@@ -66,7 +66,7 @@ function userHandlerFactory({ mysqlConnectionPool }) {
     if (rows.length === 0) {
       return null
     }
-    return rows[0]
+    return rows[0].user_id
   }
 
   return {
