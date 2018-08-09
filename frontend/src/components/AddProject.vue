@@ -55,7 +55,7 @@ export default {
   mounted() {
     if(!this.$root.$data.username) {
       console.error("no user is signed in. page cannot render without a username");
-      //TODO redirect back to home
+      this.$router.push({ name: 'home' })
       return null;
     }
     this.fetchRepositories(this.$root.$data.username);
