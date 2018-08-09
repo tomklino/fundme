@@ -35,17 +35,22 @@ const projectMutations = {
       },
       username: {
         type: new GraphQLNonNull(GraphQLString)
+      },
+      user_id: {
+        type: new GraphQLNonNull(GraphQLString)
       }
     },
-    resolve: async (rootValue, {name, username}, context) => {
+    resolve: async (rootValue, args, context) => {
+      let { name, username, user_id } = args;
+      let { session, projectsHandler } = context;
       debug(2, require('util').inspect(context, { depth: null }));
-      debug(1, "addProject mutations starting...", name, username)
-      if(context.session.github_username !== username) {
+      debug(1, "addProject mutations starting...", name, username, user_id)
+      if(session.github_username !== username) {
         console.error("username mismatch while trying to add project")
         return
       }
-      var id = await context.projectsHandler.createNewProject({name, username})
-      return await context.projectsHandler.queryProjectsById({id})
+      let id = await projectsHandler.createNewProject({name, username, user_id})
+      return await projectsHandler.queryProjectsById({id})
     }
   }
 }

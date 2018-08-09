@@ -41,8 +41,9 @@ export default {
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
   },
   methods: {
-    onUserSignin: function(new_username) {
-      this.$root.$data.username = new_username;
+    onUserSignin: function(user_ids) {
+      this.$root.$data.username = user_ids.github_username;
+      this.$root.$data.user_id = user_ids.user_id;
     }
   },
   data () {

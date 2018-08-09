@@ -37,7 +37,7 @@
             <v-btn
               color="green darken-1"
               flat="flat"
-              @click="dialog = false; addProject(project_to_add, $root.$data.username)"
+              @click="dialog = false; addProject(project_to_add)"
             >
               yes
             </v-btn>
@@ -61,16 +61,18 @@ export default {
     this.fetchRepositories(this.$root.$data.username);
   },
   methods: {
-    addProject: function(name, username) {
+    addProject: function(name) {
+      let username = this.$root.$data.username;
+      let user_id = this.$root.$data.user_id;
       console.log("Adding project", name)
       this.$apollo.mutate({
-        mutation: gql`mutation ($name: String!, $username: String!) {
-          addProject(name: $name, username: $username) {
+        mutation: gql`mutation ($name: String!, $username: String!, $user_id: String!) {
+          addProject(name: $name, username: $username, user_id: $user_id) {
             id
           }
         }`,
         variables: {
-          name, username
+          name, username, user_id
         }
       }).then((data) => {
         console.log("added project, here is the data", data)

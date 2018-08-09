@@ -22,13 +22,17 @@
       checkLogin: function() {
         fetch('/whoami', {credentials: 'same-origin'})
           .then(res => res.json())
-          .then(({logged_in, github_userid, github_username}) => {
+          .then(({ logged_in, github_userid, github_username, user_id }) => {
             if(logged_in) {
               this.show_login_button = false;
               this.github_login_link = null;
               this.github_userid = github_userid;
               this.github_username = github_username;
-              this.$emit('user-signed-in', github_username);
+              this.$emit('user-signed-in', {
+                github_userid,
+                github_username,
+                user_id
+              });
             } else {
               this.show_login_button = true;
             }
