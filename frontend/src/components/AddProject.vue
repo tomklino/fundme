@@ -6,7 +6,7 @@
         v-for="(project, index) in projects"
         :key="project.name"
         avatar
-        @click="dialog = true; project_to_add = project.name"
+        @click="verifyAddProjectDialog = true; project_to_add = project.name"
       >
         <v-list-tile-content>
           <v-list-tile-title v-html="project.name"></v-list-tile-title>
@@ -16,7 +16,7 @@
     </v-list>
 
     <v-dialog
-        v-model="dialog"
+        v-model="verifyAddProjectDialog"
         max-width="290"
       >
         <v-card>
@@ -29,7 +29,7 @@
             <v-btn
               color="grey darken-1"
               flat="flat"
-              @click="dialog = false"
+              @click="verifyAddProjectDialog = false"
             >
               No
             </v-btn>
@@ -37,9 +37,36 @@
             <v-btn
               color="green darken-1"
               flat="flat"
-              @click="dialog = false; addProject(project_to_add)"
+              @click="verifyAddProjectDialog = false; addProject(project_to_add)"
             >
               yes
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="successfullyAddedDialog"
+        max-width="290"
+        >
+        <v-card>
+          <v-card-title
+            class="headline green lighten-2"
+            primary-title
+          >
+            Project successfully linked to Voost!
+          </v-card-title>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              flat
+              @click="successfullyAddedDialog = false; $router.push({ name: 'home' })"
+            >
+              Continue
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -76,7 +103,7 @@ export default {
         }
       }).then((data) => {
         console.log("added project, here is the data", data)
-        this.$router.push({ name: 'home' })
+        this.successfullyAddedDialog = true;
       })
     },
     fetchRepositories: function(github_username) {
@@ -87,7 +114,8 @@ export default {
   },
   data () {
     return {
-      dialog: false,
+      verifyAddProjectDialog: false,
+      successfullyAddedDialog: false,
       project_to_add: null,
       projects: null
     }
