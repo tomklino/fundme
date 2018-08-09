@@ -10,15 +10,32 @@ const {
 
 const debug = require('nice_debug')("PROJECTS_DEBUG")
 
+const UserType = new GraphQLObjectType({
+  name: 'UserType',
+  description: 'User type definition',
+  fields: () => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    username: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  })
+})
+
 const ProjectType = new GraphQLObjectType({
   name: 'ProjectType',
   description: 'Project type definition',
   fields: () => ({
     id: {
+      //TODO: this should be GraphQLString?
       type: new GraphQLNonNull(GraphQLID)
     },
     name: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    owner: {
+      type: new GraphQLNonNull(UserType)
     },
     online_repo: {
       type: GraphQLString
@@ -63,10 +80,14 @@ const projectQueries = {
       name: { type: GraphQLString }
     },
     resolve: async (root, args, context) => {
+      let { projectsHandler } = context;
       if (args.id) {
-        return await context.projectsHandler.queryProjectsById({id: args.id})
+        return await projectsHandler.queryProjectsById({id: args.id})
       } else if(args.name) {
-        return await context.projectsHandler.queryProjectsByName({name: args.name})
+        return await projectsHandler.queryProjectsByName({name: args.name})
+      } else {
+        //search with no args
+        return await projectsHandler.queryProjects()
       }
       return []
     }
