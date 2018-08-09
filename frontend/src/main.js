@@ -22,7 +22,7 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'landing',
+      name: 'home',
       component: HelloWorld
     },
     {

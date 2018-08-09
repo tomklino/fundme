@@ -8,7 +8,7 @@
           flat :to=" { name: 'Add_Project' }">
           <v-icon>add_circle</v-icon>
         </v-btn>
-        <v-btn flat :to=" { name: 'landing' }">
+        <v-btn flat :to=" { name: 'home' }">
           <v-icon>home</v-icon>
         </v-btn>
         <SignInWithGithub

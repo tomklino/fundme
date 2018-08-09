@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Hi {{this.$root.$data.username}} Choose a project to add to voost</h1>
+    <h1>Link a project to Voost</h1>
     <v-list two-line>
       <v-list-tile
         v-for="(project, index) in projects"
@@ -76,6 +76,7 @@ export default {
         }
       }).then((data) => {
         console.log("added project, here is the data", data)
+        this.$router.push({ name: 'home' })
       })
     },
     fetchRepositories: function(github_username) {
