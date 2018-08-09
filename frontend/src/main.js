@@ -11,7 +11,7 @@ import 'vuetify/dist/vuetify.min.css'
 
 import App from './App'
 import AddProject from '@/components/AddProject.vue'
-import HelloWorld from '@/components/HelloWorld.vue'
+import ProjectList from '@/components/ProjectList.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -23,7 +23,7 @@ const router = new VueRouter({
     {
       path: '/',
       name: 'home',
-      component: HelloWorld
+      component: ProjectList
     },
     {
       path: '/addproject',
