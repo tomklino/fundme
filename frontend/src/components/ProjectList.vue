@@ -1,20 +1,28 @@
 <template>
-  <div>
-    <form method="POST" @submit.prevent="searchProjects">
-      <input type="text" v-model="project_query" >
-      <input type="submit" value="Search"></input>
-    </form>
-    <ul>
-      <li v-for="project in projects">
-        <span>{{ project.name }}</span>
-        <span v-if="project.online_repo">
-          <a v-bind:href=project.online_repo>
-          <img src="../assets/git.svg">
-        </a>
-        </span>
-      </li>
-    </ul>
-  </div>
+  <v-container grid-list-md>
+    <v-layout row wrap>
+      <v-flex v-for="project in projects" xs4 :key="project.id">
+        <v-card color="green lighten-1">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">{{project.name}}</h3>
+              <div>{{project.owner.username}}</div>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn flat primary
+              :to="{
+                name: 'project',
+                params: {
+                  project_id: project.id
+                }
+              }">View</v-btn>
+            <v-btn v-if="project.online_repo" :href="project.online_repo" flat dark>See in github</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -22,6 +30,10 @@ import { PROJECT_QUERY } from '@/graphql'
 
 export default {
   name: 'ProjectList',
+  mounted () {
+    // TODO: replace with actuall call to server
+    this.searchProjects();
+  },
   data () {
     return {
       project_query: "",
@@ -37,7 +49,7 @@ export default {
           name: this.project_query
         }
       }).then(({data}) => {
-        console.dir(data)
+        console.log(JSON.stringify(data))
         this.projects = data.projects
       })
     }
@@ -46,38 +58,5 @@ export default {
 </script>
 
 <style scoped>
-li {
-  width: auto;
-  position: relative;
-  list-style-type: none;
-  background-color: #9bbcf2;
-  padding: 5px;
-  height: 25px;
-  border-top: 1px solid;
-  border-color: #77818e;
-}
 
-li:last-child {
-  border-bottom: 1px solid;
-  border-color: #77818e;
-}
-
-li:hover {
-  background-color: #81a6e2;
-  cursor: pointer;
-}
-
-li > span:first-child {
-  float: left;
-  padding: 3px;
-}
-
-li > span {
-  float: right;
-}
-
-img {
-  width: 25px;
-  height: 25px;
-}
 </style>

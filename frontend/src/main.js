@@ -32,7 +32,7 @@ const router = new VueRouter({
     },
     {
       path: '/project/:project_id',
-      name: 'projects',
+      name: 'project',
       component: App
     }
   ]
