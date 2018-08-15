@@ -13,6 +13,10 @@ const schema = require('./graphql/projects.js');
 const secretSettings =
   JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'));
 
+app = express();
+
+app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+
 const mysqlConnectionPool = mysql.createPool({
   connectionLimit: 10,
   host: process.env['MYSQL_HOSTNAME'],
@@ -23,19 +27,20 @@ const mysqlConnectionPool = mysql.createPool({
 
 const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
 const userHandler = userHandlerFactory({ mysqlConnectionPool });
-app = express();
 
+//serve client application files
 const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
 const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
-app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+app.get(['/project/*', '/addproject'], function(req, res) {
+  res.send(indexHtml)
+})
 
 app.use(cookieSession({
   secret: secretSettings['cookie_secret'],
   signed: true
 }))
 
-app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
-
+const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
   return {
     schema,
     graphiql: true,
@@ -44,17 +49,15 @@ app.use('/graphql', graphqlHTTP((request, response, graphQLParams) => {
       projectsHandler
     }
   }
-}))
-
-app.get(['/project/*', '/addproject'], function(req, res) {
-  res.send(indexHtml)
 })
+app.use('/graphql', graphqlHTTPInstance)
 
-app.use('/login/github_callback', githubLoginHandlerFactory({
+const githubLoginHandler = githubLoginHandlerFactory({
   client_id: secretSettings['github'].client_id,
   client_secret: secretSettings['github'].client_secret,
   userHandler
-}))
+})
+app.use('/login/github_callback', githubLoginHandler)
 
 app.get('/whoami', function(req, res) {
   return res.send({
