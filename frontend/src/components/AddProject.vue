@@ -47,7 +47,7 @@
 
       <v-dialog
         v-model="successfullyAddedDialog"
-        max-width="290"
+        max-width="500"
         >
         <v-card>
           <v-card-title
