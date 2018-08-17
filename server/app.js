@@ -10,12 +10,16 @@ const userHandlerFactory = require('./project_modules/user_handler.js');
 const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const schema = require('./graphql/projects.js');
 
+
+const webpackConfig = require('./webpack.config.js')
+const webpack = require('webpack');
+const webpackMiddleware = require('webpack-dev-middleware');
+const compiler = webpack(webpackConfig);
+
 const secretSettings =
   JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'));
 
 app = express();
-
-app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 
 const mysqlConnectionPool = mysql.createPool({
   connectionLimit: 10,
@@ -29,11 +33,23 @@ const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
 const userHandler = userHandlerFactory({ mysqlConnectionPool });
 
 //serve client application files
-const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
-const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
-app.get(['/project/*', '/addproject'], function(req, res) {
-  res.send(indexHtml)
-})
+const client_loading_spots = ['/', '/project/*', '/addproject']
+if(process.env['FUNDME_DEV']) {
+  app.use(webpackMiddleware(compiler, {
+    publicPath: '/'
+  }))
+} else {
+  //production
+  app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+}
+
+// app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+
+// const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
+// const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
+// app.get(client_loading_spots, function(req, res) {
+//   res.send(indexHtml)
+// })
 
 app.use(cookieSession({
   secret: secretSettings['cookie_secret'],
