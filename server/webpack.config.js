@@ -85,11 +85,6 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       }
-
-      // {
-      //   test: /\.css$/,
-      //   loader: 'css-loader'
-      // }
     ].concat(utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true }))
   }
 }
