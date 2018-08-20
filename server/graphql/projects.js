@@ -1,3 +1,5 @@
+const debug = require('nice_debug')("PROJECTS_DEBUG")
+
 const {
   GraphQLString,
   GraphQLList,
@@ -7,8 +9,6 @@ const {
   GraphQLNonNull,
   GraphQLSchema
 } = require('graphql');
-
-const debug = require('nice_debug')("PROJECTS_DEBUG")
 
 const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -37,6 +37,9 @@ const ProjectType = new GraphQLObjectType({
     owner: {
       type: new GraphQLNonNull(UserType)
     },
+    description: {
+      type: GraphQLString
+    },
     online_repo: {
       type: GraphQLString
     }
@@ -55,18 +58,20 @@ const projectMutations = {
       },
       user_id: {
         type: new GraphQLNonNull(GraphQLString)
+      },
+      description: {
+        type: GraphQLString
       }
     },
     resolve: async (rootValue, args, context) => {
-      let { name, username, user_id } = args;
       let { session, projectsHandler } = context;
       debug(2, require('util').inspect(context, { depth: null }));
-      debug(1, "addProject mutations starting...", name, username, user_id)
-      if(session.github_username !== username) {
+      debug(1, "addProject mutations starting...", args)
+      if(session.github_username !== args.username) {
         console.error("username mismatch while trying to add project")
         return
       }
-      let id = await projectsHandler.createNewProject({name, username, user_id})
+      let id = await projectsHandler.createNewProject(args)
       return await projectsHandler.queryProjectsById({id})
     }
   }

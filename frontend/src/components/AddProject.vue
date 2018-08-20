@@ -6,7 +6,7 @@
         v-for="(project, index) in projects"
         :key="project.name"
         avatar
-        @click="verifyAddProjectDialog = true; project_to_add = project.name"
+        @click="verifyAddProjectDialog = true; project_to_add = project"
       >
         <v-list-tile-content>
           <v-list-tile-title v-html="project.name"></v-list-tile-title>
@@ -20,8 +20,8 @@
         max-width="290"
       >
         <v-card>
-          <v-card-title class="headline">Add {{project_to_add}} to voost?</v-card-title>
-          <v-card-text>This will add a project listing for &quot;{{project_to_add}}&quot; and you and others will be able to add feature requests and pledge for them, or sponsor your project
+          <v-card-title class="headline">Add {{project_to_add.name}} to voost?</v-card-title>
+          <v-card-text>This will add a project listing for &quot;{{project_to_add.name}}&quot; and you and others will be able to add feature requests and pledge for them, or sponsor your project
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -88,18 +88,18 @@ export default {
     this.fetchRepositories(this.$root.$data.username);
   },
   methods: {
-    addProject: function(name) {
+    addProject: function({ name, description }) {
       let username = this.$root.$data.username;
       let user_id = this.$root.$data.user_id;
       console.log("Adding project", name)
       this.$apollo.mutate({
-        mutation: gql`mutation ($name: String!, $username: String!, $user_id: String!) {
-          addProject(name: $name, username: $username, user_id: $user_id) {
+        mutation: gql`mutation ($name: String!, $username: String!, $user_id: String!, $description: String) {
+          addProject(name: $name, username: $username, user_id: $user_id, description: $description) {
             id
           }
         }`,
         variables: {
-          name, username, user_id
+          name, username, user_id, description
         }
       }).then((data) => {
         console.log("added project, here is the data", data)
@@ -116,7 +116,7 @@ export default {
     return {
       verifyAddProjectDialog: false,
       successfullyAddedDialog: false,
-      project_to_add: null,
+      project_to_add: { name: "" },
       projects: null
     }
   }

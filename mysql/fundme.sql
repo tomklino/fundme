@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `name` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `online_repo` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   UNIQUE KEY `project_id` (`project_id`(255))
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

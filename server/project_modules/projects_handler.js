@@ -1,8 +1,9 @@
 const randomString = require('randomstring')
 const debug = require('nice_debug')("PROJECT_HANDLER_DEBUG")
 
+//TODO: consider importing all of the statements from a seperate file
 const CREATE_NEW_PROJECT_STATEMENT =
-  "INSERT INTO `Projects` (project_id, name, online_repo, user_id) VALUES (?,?,?,?)"
+  "INSERT INTO `Projects` (project_id, name, online_repo, user_id, description) VALUES (?,?,?,?,?)"
 const QUERY_PROJECTS =
   "SELECT `project_id`, `name`, `online_repo`, `Users`.`user_id`, `github_login` FROM `Projects` INNER JOIN `Users` ON `Projects`.`user_id` = `Users`.`user_id`"
 const QUERY_PROJECT_BY_ID =
@@ -26,7 +27,8 @@ function projectHandlerFactory({
     createNewProject: async function({
       name,
       username,
-      user_id
+      user_id,
+      description = null
     }) {
       debug(1, `createNewProject called with name ${name}`)
       id = generateProjectId();
@@ -36,7 +38,8 @@ function projectHandlerFactory({
           id,
           name,
           online_repo,
-          user_id
+          user_id,
+          description
         ])
       } catch(e) {
         console.error("ERROR: project_handler.js: " + e.code)
@@ -59,7 +62,7 @@ function projectHandlerFactory({
         }
       })
     },
-    
+
     queryProjectsByName: async function({
       name
     }) {
