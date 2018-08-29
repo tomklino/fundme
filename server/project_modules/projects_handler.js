@@ -5,7 +5,7 @@ const debug = require('nice_debug')("PROJECT_HANDLER_DEBUG")
 const CREATE_NEW_PROJECT_STATEMENT =
   "INSERT INTO `Projects` (project_id, name, online_repo, user_id, description) VALUES (?,?,?,?,?)"
 const QUERY_PROJECTS =
-  "SELECT `project_id`, `name`, `online_repo`, `Users`.`user_id`, `github_login` FROM `Projects` INNER JOIN `Users` ON `Projects`.`user_id` = `Users`.`user_id`"
+  "SELECT `project_id`, `name`, `description`, `online_repo`, `Users`.`user_id`, `github_login` FROM `Projects` INNER JOIN `Users` ON `Projects`.`user_id` = `Users`.`user_id`"
 const QUERY_PROJECT_BY_ID =
   QUERY_PROJECTS + " WHERE `project_id`=?"
 const QUERY_PROJECTS_BY_NAME =
@@ -13,6 +13,20 @@ const QUERY_PROJECTS_BY_NAME =
 
 function generateProjectId() {
   return "P-" + randomString.generate(7);
+}
+
+function mapDataToResult({
+  project_id, name, description, online_repo, user_id, github_login }) {
+  return {
+    id: project_id,
+    name,
+    description,
+    owner: {
+      id: user_id,
+      username: github_login
+    },
+    online_repo
+  }
 }
 
 function projectHandlerFactory({
@@ -50,17 +64,7 @@ function projectHandlerFactory({
 
     queryProjects: async function() {
       var [ rows ] = await mysqlConnectionPool.query(QUERY_PROJECTS)
-      return rows.map(({ project_id, name, online_repo, user_id, github_login }) => {
-        return {
-          id: project_id,
-          name,
-          owner: {
-            id: user_id,
-            username: github_login
-          },
-          online_repo
-        }
-      })
+      return rows.map(mapDataToResult)
     },
 
     queryProjectsByName: async function({
@@ -70,17 +74,7 @@ function projectHandlerFactory({
       var [ rows ] = await mysqlConnectionPool.query(QUERY_PROJECTS_BY_NAME, [
         "%" + name + "%"
       ])
-      return rows.map(({ project_id, name, online_repo, user_id, github_login }) => {
-        return {
-          id: project_id,
-          name,
-          owner: {
-            id: user_id,
-            username: github_login
-          },
-          online_repo
-        }
-      })
+      return rows.map(mapDataToResult)
     },
 
 
@@ -89,17 +83,7 @@ function projectHandlerFactory({
     }) {
       debug(1, `queryProjectsById called with id ${id}`)
       var [ rows ] = await mysqlConnectionPool.query(QUERY_PROJECT_BY_ID, [id])
-      return rows.map(({ project_id, name, online_repo, user_id, github_login }) => {
-        return {
-          id: project_id,
-          name,
-          owner: {
-            id: user_id,
-            username: github_login
-          },
-          online_repo
-        }
-      })
+      return rows.map(mapDataToResult)
     }
   }
 }
