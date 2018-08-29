@@ -12,11 +12,13 @@ import 'vuetify/dist/vuetify.min.css'
 import App from './App'
 import AddProject from '@/components/AddProject.vue'
 import ProjectList from '@/components/ProjectList.vue'
+import ProjectPage from '@/components/ProjectPage.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
 
 /* eslint-disable no-new */
+//TODO routing should be imported from a seperate file
 const router = new VueRouter({
   mode: 'history',
   routes: [
@@ -33,7 +35,7 @@ const router = new VueRouter({
     {
       path: '/project/:project_id',
       name: 'project',
-      component: App
+      component: ProjectPage
     }
   ]
 })
