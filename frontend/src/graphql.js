@@ -5,6 +5,7 @@ export const PROJECT_QUERY = gql`
     projects (name: $name) {
       id,
       name,
+      description,
       owner {
         username
       },

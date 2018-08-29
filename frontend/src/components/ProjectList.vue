@@ -6,7 +6,8 @@
           <v-card-title primary-title>
             <div>
               <h3 class="headline mb-0">{{project.name}}</h3>
-              <div>{{project.owner.username}}</div>
+              <div class="description">{{project.description}}</div>
+              <div class="username blue-grey--text text--darken-2">{{project.owner.username}}</div>
             </div>
           </v-card-title>
           <v-card-actions>
@@ -58,5 +59,11 @@ export default {
 </script>
 
 <style scoped>
+.description {
 
+}
+.username {
+  padding-top: 18px;
+  font-size: 14px;
+}
 </style>
