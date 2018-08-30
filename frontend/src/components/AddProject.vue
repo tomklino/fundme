@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
+import { PROJECT_MUTATION_CREATE } from '@/graphql'
 
 export default {
   name: 'AddProject',
@@ -89,17 +89,14 @@ export default {
   },
   methods: {
     addProject: function({ name, description }) {
-      let username = this.$root.$data.username;
-      let user_id = this.$root.$data.user_id;
       console.log("Adding project", name)
       this.$apollo.mutate({
-        mutation: gql`mutation ($name: String!, $username: String!, $user_id: String!, $description: String) {
-          addProject(name: $name, username: $username, user_id: $user_id, description: $description) {
-            id
-          }
-        }`,
+        mutation: PROJECT_MUTATION_CREATE,
         variables: {
-          name, username, user_id, description
+          name,
+          username: this.$root.$data.username,
+          user_id: this.$root.$data.user_id,
+          description
         }
       }).then((data) => {
         console.log("added project, here is the data", data)

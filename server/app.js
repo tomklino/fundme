@@ -40,14 +40,6 @@ if(process.env['FUNDME_DEV']) {
   app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 }
 
-// app.use(express.static(path.join(__dirname, '/../frontend/dist')));
-
-// const pathToIndexHtml = path.join(__dirname, '/../frontend/dist/index.html')
-// const indexHtml = fs.readFileSync(pathToIndexHtml, 'utf8');
-// app.get(client_loading_spots, function(req, res) {
-//   res.send(indexHtml)
-// })
-
 app.use(cookieSession({
   secret: secretSettings['cookie_secret'],
   signed: true
@@ -84,7 +76,7 @@ app.get('/whoami', function(req, res) {
 
 async function checkAndStartServer(port) {
   try {
-    let [rows] = await mysqlConnectionPool.query('select * from `Projects`')
+    let [ rows ] = await mysqlConnectionPool.query('select * from `Projects`')
     console.log(`query to db went fine. got ${rows.length} rows`);
   } catch(e) {
     console.error(`error reaching database: ${e.code}. terminating.`)
