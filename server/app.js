@@ -6,10 +6,10 @@ const graphqlHTTP = require('express-graphql');
 const cookieSession = require('cookie-session');
 
 const projectsHandlerFactory = require('./project_modules/projects_handler.js');
+const challengeHandlerFactory = require('./project_modules/challenges_handler.js');
 const userHandlerFactory = require('./project_modules/user_handler.js');
 const githubLoginHandlerFactory = require('./project_modules/github_login.js');
-const schema = require('./graphql/projects.js');
-
+const schema = require('./graphql/schema.js');
 
 const webpackConfig = require('./webpack.config.js')
 const webpack = require('webpack');
@@ -28,9 +28,6 @@ const mysqlConnectionPool = mysql.createPool({
   password: process.env['MYSQL_PASSWORD'],
   database: process.env['MYSQL_DATABASE']
 });
-
-const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
-const userHandler = userHandlerFactory({ mysqlConnectionPool });
 
 //serve client application files
 const client_loading_spots = ['/', '/project/*', '/addproject']
@@ -62,7 +59,8 @@ const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
     graphiql: true,
     context: {
       session: request.session,
-      projectsHandler
+      projectsHandler: projectsHandlerFactory({ mysqlConnectionPool }),
+      challengeHandler: challengeHandlerFactory({ mysqlConnectionPool })
     }
   }
 })
@@ -71,7 +69,7 @@ app.use('/graphql', graphqlHTTPInstance)
 const githubLoginHandler = githubLoginHandlerFactory({
   client_id: secretSettings['github'].client_id,
   client_secret: secretSettings['github'].client_secret,
-  userHandler
+  userHandler: userHandlerFactory({ mysqlConnectionPool })
 })
 app.use('/login/github_callback', githubLoginHandler)
 

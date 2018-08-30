@@ -6,8 +6,7 @@ const {
   GraphQLID,
   GraphQLInputObjectType,
   GraphQLObjectType,
-  GraphQLNonNull,
-  GraphQLSchema
+  GraphQLNonNull
 } = require('graphql');
 
 const UserType = new GraphQLObjectType({
@@ -99,17 +98,7 @@ const projectQueries = {
   }
 }
 
-module.exports = new GraphQLSchema({
-  query: new GraphQLObjectType({
-    name: 'Query',
-    fields: () => ({
-      ...projectQueries
-    })
-  }),
-  mutation: new GraphQLObjectType({
-    name: 'Mutation',
-    fields: () => ({
-      ...projectMutations
-    })
-  })
-})
+module.exports = {
+  projectQueries,
+  projectMutations
+}

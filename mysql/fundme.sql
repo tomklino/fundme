@@ -17,3 +17,13 @@ CREATE TABLE IF NOT EXISTS `Users` (
   UNIQUE KEY `user_id` (`user_id`(64)),
   UNIQUE (`github_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `Challenges` (
+  `challenge_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `challenge_name` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `project_id` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `challenge_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `amout_pledged` decimal(13,2) DEFAULT 0.00,
+  `currency_symbol` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT "USD",
+  UNIQUE KEY `challenge_id` (`challenge_id`(64))
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

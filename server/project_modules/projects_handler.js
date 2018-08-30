@@ -63,7 +63,9 @@ function projectHandlerFactory({
     },
 
     queryProjects: async function() {
+      debug(1, `queryProjects called`)
       var [ rows ] = await mysqlConnectionPool.query(QUERY_PROJECTS)
+      debug(2, `found ${rows.length} from db`)
       return rows.map(mapDataToResult)
     },
 
