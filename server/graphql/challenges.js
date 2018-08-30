@@ -4,6 +4,7 @@ const {
   GraphQLObjectType,
   GraphQLNonNull,
   GraphQLString,
+  GraphQLFloat,
   GraphQLList
 } = require('graphql');
 
@@ -20,7 +21,7 @@ const ChallengeType = new GraphQLObjectType({
     project_id: {
       type: new GraphQLNonNull(GraphQLString)
     },
-    project_type: {
+    challenge_type: {
       type: new GraphQLNonNull(GraphQLString)
     },
     amout_pledged: {
@@ -33,7 +34,20 @@ const ChallengeType = new GraphQLObjectType({
 })
 
 const challengeQueries = {
-
+  challenges: {
+    type: new GraphQLList(ChallengeType),
+    args: {
+      project_id: {
+        type: new GraphQLNonNull(GraphQLString)
+      }
+    },
+    resolve: async (root, args, context) => {
+      const { challengeHandler } = context;
+      return await challengeHandler.queryChallenges({
+        project_id: args.project_id
+      })
+    }
+  }
 }
 
 const challengeMutations = {

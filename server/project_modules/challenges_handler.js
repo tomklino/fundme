@@ -5,9 +5,24 @@ const CHALLENGE_TABLE_FIELDS = [ "challenge_id", "challenge_name", "project_id",
 const CREATE_NEW_CHALLENGE_STATEMENT = "INSERT INTO `Challenges` (" +
   CHALLENGE_TABLE_FIELDS.join(',') + ") VALUES (" +
   CHALLENGE_TABLE_FIELDS.map(f => '?').join(',') + ")"
+const QUERY_CHALLENGES = "SELECT " +
+  CHALLENGE_TABLE_FIELDS.join(',') + " FROM `Challenges`"
+const QUERY_CHALLENGES_BY_PROJECT_ID = QUERY_CHALLENGES + " WHERE `project_id`=?"
 
 function generateChallengeId() {
   return "C-" + randomString.generate(8)
+}
+
+function mapDataToResult({
+  challenge_id, challenge_name, project_id, challenge_type, amout_pledged, currency_symbol }) {
+  return {
+    id: challenge_id,
+    name: challenge_name,
+    project_id,
+    challenge_type,
+    amout_pledged,
+    currency_symbol
+  }
 }
 
 function challengeHandlerFactory({
@@ -39,6 +54,13 @@ function challengeHandlerFactory({
         throw e;
       }
       return challenge_id;
+    },
+
+    queryChallenges: async function({ project_id }) {
+      debug(1, `queryChallenges called with ${project_id}`)
+      let [ rows ] = await mysqlConnectionPool.query(
+          QUERY_CHALLENGES_BY_PROJECT_ID, [ project_id ])
+      return rows.map(mapDataToResult)
     }
   }
 }
