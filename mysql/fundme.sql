@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS `Projects` (
   `online_repo` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `user_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(2048) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `project_id` (`project_id`(255))
+  UNIQUE KEY `project_id` (`project_id`(255)),
+  FOREIGN KEY (`user_id`) REFERENCES `Users(user_id)`
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `Users` (
@@ -25,5 +26,6 @@ CREATE TABLE IF NOT EXISTS `Challenges` (
   `challenge_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `amout_pledged` decimal(13,2) DEFAULT 0.00,
   `currency_symbol` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT "USD",
-  UNIQUE KEY `challenge_id` (`challenge_id`(64))
+  UNIQUE KEY `challenge_id` (`challenge_id`(64)),
+  FOREIGN KEY (`project_id`) REFERENCES `Projects(project_id)`
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
