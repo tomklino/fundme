@@ -13,6 +13,7 @@ import App from './App'
 import AddProject from '@/components/AddProject.vue'
 import ProjectList from '@/components/ProjectList.vue'
 import ProjectPage from '@/components/ProjectPage.vue'
+import AddChallenge from '@/components/AddChallenge.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
@@ -36,6 +37,11 @@ const router = new VueRouter({
       path: '/project/:project_id',
       name: 'project',
       component: ProjectPage
+    },
+    {
+      path: '/project/:project_id/add_challenge',
+      name: 'add_challenge',
+      component: AddChallenge
     }
   ]
 })

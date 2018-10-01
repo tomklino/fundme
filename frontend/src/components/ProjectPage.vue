@@ -1,6 +1,15 @@
 <template>
   <div>
     <h1>{{project.name}}</h1>
+    <v-btn flat primary
+      :to="{
+        name: 'add_challenge',
+        params: {
+          project_id
+        }
+      }">
+        <v-icon>note_add</v-icon>
+    </v-btn>
     <div class="description">{{project.description}}
     </div>
   </div>
@@ -25,7 +34,8 @@ export default {
   },
   data () {
     return {
-      project: {}
+      project: {},
+      ...this.$route.params
     }
   }
 }
