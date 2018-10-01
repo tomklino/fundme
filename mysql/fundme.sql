@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `Challenges` (
   `challenge_name` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `project_id` varchar(512) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `challenge_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `challenge_description` varchar(4096) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `amout_pledged` decimal(13,2) DEFAULT 0.00,
   `currency_symbol` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT "USD",
   UNIQUE KEY `challenge_id` (`challenge_id`(64)),
