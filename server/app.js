@@ -36,7 +36,7 @@ if(process.env['FUNDME_DEV']) {
     publicPath: '/'
   }))
 } else {
-  //production
+  console.log("PRODUCTION!")
   app.use(express.static(path.join(__dirname, '/../frontend/dist')));
 }
 
