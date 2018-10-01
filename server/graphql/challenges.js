@@ -21,6 +21,9 @@ const ChallengeType = new GraphQLObjectType({
     project_id: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    challenge_description: {
+      type: GraphQLString
+    },
     challenge_type: {
       type: new GraphQLNonNull(GraphQLString)
     },
@@ -52,13 +55,16 @@ const challengeQueries = {
 
 const challengeMutations = {
   addChallenge: {
-    type: new GraphQLList(GraphQLString),
+    type: new GraphQLList(ChallengeType),
     args: {
       challenge_name: {
         type: new GraphQLNonNull(GraphQLString)
       },
       challenge_type: {
         type: new GraphQLNonNull(GraphQLString)
+      },
+      challenge_description: {
+        type: GraphQLString
       },
       project_id: {
         type: new GraphQLNonNull(GraphQLString)
@@ -67,12 +73,8 @@ const challengeMutations = {
     resolve: async (root, args, context) => {
       let { challengeHandler } = context;
       try {
-        let challenge_id = await challengeHandler.createNewChallenge({
-          challenge_name: args.challenge_name,
-          challenge_type: args.challenge_type,
-          project_id: args.project_id
-        })
-        return [ challenge_id ];
+        let challenge_id = await challengeHandler.createNewChallenge(args);
+        return challengeHandler.queryChallenge({ challenge_id });
       } catch(e) {
         console.error("ERROR: challenges.js: " + e.code)
         throw e;
