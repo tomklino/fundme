@@ -1,5 +1,21 @@
 import gql from 'graphql-tag'
 
+export const CHALLENGE_MUTATION_CREATE = gql`
+  mutation (
+    $challenge_name: String!,
+    $challenge_type: String!,
+    $challenge_description: String,
+    $project_id: String!) {
+      addChallenge(
+        challenge_name: $challenge_name,
+        challenge_type: $challenge_type,
+        challenge_description: $challenge_description,
+        project_id: $project_id) {
+          id
+      }
+    }
+`
+
 export const PROJECT_MUTATION_CREATE = gql`
   mutation (
     $name: String!,
