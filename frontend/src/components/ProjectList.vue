@@ -32,7 +32,6 @@ import { PROJECT_QUERY } from '@/graphql'
 export default {
   name: 'ProjectList',
   mounted () {
-    // TODO: replace with actuall call to server
     this.searchProjects();
   },
   data () {
@@ -49,7 +48,7 @@ export default {
         variables: {
           name: this.project_query
         }
-      }).then(({data}) => {
+      }).then(({ data }) => {
         console.log(JSON.stringify(data))
         this.projects = data.projects
       })
