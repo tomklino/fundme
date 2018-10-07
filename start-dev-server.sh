@@ -15,9 +15,12 @@ $(echo $DIR/dev-server-cleanup.sh);
 
 docker run --name $MYSQL_DOCKER_NAME -e MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD -d $MYSQL_DOCKER_IMAGE 2>&1 >/dev/null
 
-sleep 1; #HACK wait until container is up
-
 export MYSQL_HOSTNAME=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $MYSQL_DOCKER_NAME)
+
+until echo "exit" | mysql --host $MYSQL_HOSTNAME --user root -p$MYSQL_PASSWORD 2>/dev/null; do
+  echo "mysql is unavailable - sleeping"
+  sleep 1
+done
 
 ENVIRONMENT_VARIABLES_FILE=/tmp/fundme-env-variables
 
