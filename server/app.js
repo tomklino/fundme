@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const nconf = require('nconf');
 const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
 const cookieSession = require('cookie-session');
@@ -17,26 +16,17 @@ const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const compiler = webpack(webpackConfig);
 
-nconf
-  .argv()
-  .env('__')
+const configLoader = require('./config-loader.js')
 
-let conf_file_location =
-  nconf.get('conf-file-location') || __dirname + '/config.json'
-nconf.file(conf_file_location)
-
-nconf.file('defaults', __dirname + '/config.defaults.json')
-
-const secretSettings =
-  JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'));
+const config = configLoader({ home_dir: __dirname })
 
 app = express();
 
-const mysqlConnectionPool = mysql.createPool(nconf.get('mysql'))
+const mysqlConnectionPool = mysql.createPool(config.get('mysql'))
 
 //serve client application files
 const client_loading_spots = [ '/', '/project/*', '/addproject' ]
-if(nconf.get('FUNDME_DEV')) {
+if(config.get('FUNDME_DEV')) {
   app.use(webpackMiddleware(compiler, {
     publicPath: '/'
   }))
@@ -46,7 +36,7 @@ if(nconf.get('FUNDME_DEV')) {
 }
 
 app.use(cookieSession({
-  secret: secretSettings['cookie_secret'],
+  secret: config.get('cookie_secret'),
   signed: true
 }))
 
@@ -64,8 +54,8 @@ const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
 app.use('/graphql', graphqlHTTPInstance)
 
 const githubLoginHandler = githubLoginHandlerFactory({
-  client_id: secretSettings['github'].client_id,
-  client_secret: secretSettings['github'].client_secret,
+  client_id: config.get('github').client_id,
+  client_secret: config.get('github').client_secret,
   userHandler: userHandlerFactory({ mysqlConnectionPool })
 })
 app.use('/login/github_callback', githubLoginHandler)
@@ -92,4 +82,4 @@ async function checkAndStartServer(port) {
   })
 }
 
-checkAndStartServer(nconf.get('listen-port'))
+checkAndStartServer(config.get('listen-port'))
