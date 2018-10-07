@@ -21,11 +21,9 @@ nconf
   .argv()
   .env('__')
 
-if(nconf.get('conf-file-location')) {
-  nconf.file(nconf.get('conf-file-location'))
-} else {
-  nconf.file(__dirname + '/config.json')
-}
+let conf_file_location =
+  nconf.get('conf-file-location') || __dirname + '/config.json'
+nconf.file(conf_file_location)
 
 nconf.file('defaults', __dirname + '/config.defaults.json')
 

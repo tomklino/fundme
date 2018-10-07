@@ -2,8 +2,9 @@
   "listen-port": "3000",
   "mysql": {
     "connectionLimit": "10",
-    "host": "localhost",
+    "host": "10.0.0.1",
     "user": "root",
-    "database": "fundme"
+    "database": "fundme",
+    "password": "1q2w3e4r"
   }
 }
