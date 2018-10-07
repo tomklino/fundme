@@ -17,6 +17,7 @@
     "graphql": "^0.13.2",
     "html-webpack-plugin": "^3.2.0",
     "mysql2": "^1.5.3",
+    "nconf": "^0.10.0",
     "nice_debug": "^0.1.1",
     "randomstring": "^1.1.5",
     "superagent": "^3.8.3",

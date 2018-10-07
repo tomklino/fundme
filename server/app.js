@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const nconf = require('nconf');
 const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
 const cookieSession = require('cookie-session');
@@ -16,22 +17,28 @@ const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const compiler = webpack(webpackConfig);
 
+nconf
+  .argv()
+  .env('__')
+
+if(nconf.get('conf-file-location')) {
+  nconf.file(nconf.get('conf-file-location'))
+} else {
+  nconf.file(__dirname + '/config.json')
+}
+
+nconf.file('defaults', __dirname + '/config.defaults.json')
+
 const secretSettings =
   JSON.parse(fs.readFileSync(`${__dirname}/secret_settings.json`, 'utf8'));
 
 app = express();
 
-const mysqlConnectionPool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env['MYSQL_HOSTNAME'],
-  user: process.env['MYSQL_USER'],
-  password: process.env['MYSQL_PASSWORD'],
-  database: process.env['MYSQL_DATABASE']
-});
+const mysqlConnectionPool = mysql.createPool(nconf.get('mysql'))
 
 //serve client application files
-const client_loading_spots = ['/', '/project/*', '/addproject']
-if(process.env['FUNDME_DEV']) {
+const client_loading_spots = [ '/', '/project/*', '/addproject' ]
+if(nconf.get('FUNDME_DEV')) {
   app.use(webpackMiddleware(compiler, {
     publicPath: '/'
   }))
@@ -87,4 +94,4 @@ async function checkAndStartServer(port) {
   })
 }
 
-checkAndStartServer(process.env['FUNDME_HTTP_PORT'] || 80)
+checkAndStartServer(nconf.get('listen-port'))
