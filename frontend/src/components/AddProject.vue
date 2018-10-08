@@ -64,7 +64,7 @@
             <v-btn
               color="primary"
               flat
-              @click="successfullyAddedDialog = false; $router.push({ name: 'home' })"
+              @click="successfullyAddedDialog = false; $router.replace({ name: 'home' })"
             >
               Continue
             </v-btn>

@@ -50,7 +50,6 @@ function challengeHandlerFactory({
     }) {
       challenge_id = generateChallengeId();
       try {
-        //TODO make sure project_id actually exists in projects table before adding challenge
         await mysqlConnectionPool.execute(CREATE_NEW_CHALLENGE_STATEMENT, [
           challenge_id,
           challenge_name,

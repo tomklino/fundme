@@ -19,7 +19,10 @@
         label="Description"
         rows="4"
       ></v-textarea>
-      <v-btn @click="sumbitChallenge">SUBMIT</v-btn>
+      <v-btn @click="sumbitChallenge" :disabled="sumbit_button_disabled">
+        <v-progress-circular v-if="sumbit_button_disabled" />
+        {{ sumbit_button_text }}
+      </v-btn>
     </v-form>
   </div>
 </template>
@@ -30,32 +33,34 @@ import { CHALLENGE_MUTATION_CREATE } from '@/graphql'
 export default {
   name: 'AddChallenge',
   methods: {
-    sumbitChallenge: function() {
-      //TODO disable submit button and change to loading animation
-      this.addChallenge({
+    sumbitChallenge: async function() {
+      this.sumbit_button_disabled = true;
+      this.sumbit_button_text = "";
+      await this.addChallenge({
         challenge_name: this.challenge_name,
         challenge_description: this.challenge_description,
         challenge_type: this.challenge_type,
         project_id: this.$route.params.project_id
       })
-      //TODO after done, show dialog or redirect back to project
+      this.$router.replace({
+        name: 'project',
+        params: { project_id: this.$route.params.project_id }
+      });
     },
 
-    addChallenge: function (variables) {
+    addChallenge: async function (variables) {
         console.log("Adding challenge. variables: ");
         console.dir(variables)
-        this.$apollo.mutate({
+        return await this.$apollo.mutate({
           mutation: CHALLENGE_MUTATION_CREATE,
           variables
-        }).then((data) => {
-          console.log("added challenge. here is the response:", data)
-        }).catch((e) => {
-          console.log("error while trying to create challenge:", e)
         })
       }
   },
   data () {
     return {
+      sumbit_button_disabled: false,
+      sumbit_button_text: "SUBMIT",
       valid: false,
       challenge_description: '',
       challenge_name: '',

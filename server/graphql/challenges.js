@@ -74,7 +74,7 @@ const challengeMutations = {
       let { challengeHandler } = context;
       try {
         let challenge_id = await challengeHandler.createNewChallenge(args);
-        return challengeHandler.queryChallenge({ challenge_id });
+        return await challengeHandler.queryChallenge({ challenge_id });
       } catch(e) {
         console.error("ERROR: challenges.js: " + e.code)
         throw e;
