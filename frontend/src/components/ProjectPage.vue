@@ -12,14 +12,19 @@
     </v-btn>
     <div class="description">{{project.description}}
     </div>
+    <ChallengeList></ChallengeList>
   </div>
 </template>
 
 <script>
 import { PROJECT_QUERY_BY_ID } from '@/graphql'
+import ChallengeList from '@/components/ChallengeList'
 
 export default {
   name: 'ProjectPage',
+  components: {
+    ChallengeList
+  },
   mounted () {
     console.dir(this.$route.params['project_id'])
     this.$apollo.query({

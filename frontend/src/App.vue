@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import ProjectList from './components/ProjectList'
-import ProjectAboutBox from './components/ProjectAboutBox'
-import SignInWithGithub from './components/SignInWithGithub'
+import ProjectList from '@/components/ProjectList'
+import ProjectAboutBox from '@/components/ProjectAboutBox'
+import SignInWithGithub from '@/components/SignInWithGithub'
 
 export default {
   name: 'App',
