@@ -44,10 +44,7 @@ export default {
     searchProjects(event) {
       console.log(`name is ${this.project_query}`)
       this.$apollo.query({
-        query: PROJECT_QUERY,
-        variables: {
-          name: this.project_query
-        }
+        query: PROJECT_QUERY
       }).then(({ data }) => {
         console.log(JSON.stringify(data))
         this.projects = data.projects

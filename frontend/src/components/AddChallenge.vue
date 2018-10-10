@@ -28,7 +28,10 @@
 </template>
 
 <script>
-import { CHALLENGE_MUTATION_CREATE } from '@/graphql'
+import {
+  CHALLENGE_MUTATION_CREATE,
+  CHALLENGE_QUERY
+} from '@/graphql'
 
 export default {
   name: 'AddChallenge',
@@ -53,7 +56,14 @@ export default {
         console.dir(variables)
         return await this.$apollo.mutate({
           mutation: CHALLENGE_MUTATION_CREATE,
-          variables
+          variables,
+          awaitRefetchQueries: true,
+          refetchQueries: [{
+            query: CHALLENGE_QUERY,
+            variables: {
+              project_id: this.$route.params.project_id
+            }
+          }]
         })
       }
   },

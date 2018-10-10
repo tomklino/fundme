@@ -75,7 +75,10 @@
 </template>
 
 <script>
-import { PROJECT_MUTATION_CREATE } from '@/graphql'
+import {
+  PROJECT_MUTATION_CREATE,
+  PROJECT_QUERY
+} from '@/graphql'
 
 export default {
   name: 'AddProject',
@@ -97,7 +100,11 @@ export default {
           username: this.$root.$data.username,
           user_id: this.$root.$data.user_id,
           description
-        }
+        },
+        awaitRefetchQueries: true,
+        refetchQueries: [{
+          query: PROJECT_QUERY
+        }]
       }).then((data) => {
         console.log("added project, here is the data", data)
         this.successfullyAddedDialog = true;
