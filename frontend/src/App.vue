@@ -13,7 +13,9 @@
         </v-btn>
         <SignInWithGithub
           github_clientid="5c6f1bd40f1841f1674a"
-          v-on:user-signed-in="onUserSignin"/>
+          v-on:user-signed-in="onUserSignin"
+          v-bind:logged_in_user="$root.$data.username"/>
+        <LogoutButton v-if="$root.$data.isUserLoggedIn"/>
       </v-toolbar-items>
     </v-toolbar>
     <v-content>
@@ -33,6 +35,7 @@
 import ProjectList from '@/components/ProjectList'
 import ProjectAboutBox from '@/components/ProjectAboutBox'
 import SignInWithGithub from '@/components/SignInWithGithub'
+import LogoutButton from '@/components/LogoutButton'
 
 export default {
   name: 'App',
@@ -42,6 +45,7 @@ export default {
   },
   methods: {
     onUserSignin: function(user_ids) {
+      this.$root.$data.isUserLoggedIn = true;
       this.$root.$data.username = user_ids.github_username;
       this.$root.$data.user_id = user_ids.user_id;
     }
@@ -57,7 +61,8 @@ export default {
     source: String
   },
   components: {
-    SignInWithGithub
+    SignInWithGithub,
+    LogoutButton
   }
 }
 </script>

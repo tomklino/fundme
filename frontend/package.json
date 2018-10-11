@@ -19,6 +19,7 @@
     "graphql-tag": "^2.9.2",
     "vue": "^2.5.2",
     "vue-apollo": "^3.0.0-beta.19",
+    "vue-resource": "^1.5.1",
     "vue-router": "^3.0.1",
     "vuetify": "^1.2.5"
   },

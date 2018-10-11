@@ -1,11 +1,11 @@
 <template>
     <v-btn
-      flat v-bind:href=github_login_link>
+      flat v-bind:href=github_login_link v-bind:disabled="!show_login_button">
       <!-- FIXME: image not showing up on firefox -->
       <img src="@/assets/github-logo.svg" style="max-width: 50%; max-height: 50%;">
       <span v-if="show_login_button">Login with GitHub</span>
-      <v-progress-circular v-if="!show_login_button && github_username === null" indeterminate />
-      <span v-if="!show_login_button && github_username !== null">{{github_username}}</span>
+      <v-progress-circular v-if="!show_login_button && logged_in_user === null" indeterminate />
+      <span v-if="!show_login_button && logged_in_user !== null">{{logged_in_user}}</span>
     </v-btn>
 </template>
 
@@ -17,6 +17,7 @@
     },
     props: [
       'github_clientid',
+      'logged_in_user'
     ],
     methods: {
       checkLogin: function() {
@@ -24,27 +25,23 @@
           .then(res => res.json())
           .then(({ logged_in, github_userid, github_username, user_id }) => {
             if(logged_in) {
-              this.show_login_button = false;
-              this.github_login_link = null;
-              this.github_userid = github_userid;
-              this.github_username = github_username;
               this.$emit('user-signed-in', {
                 github_userid,
                 github_username,
                 user_id
               });
-            } else {
-              this.show_login_button = true;
             }
           })
       }
     },
-    data () {
-      return {
-        github_login_link: `https://github.com/login/oauth/authorize?client_id=${this.github_clientid}`,
-        show_login_button: false,
-        github_userid: null,
-        github_username: null
+    computed: {
+      show_login_button: function() {
+        return !this.logged_in_user
+      },
+      github_login_link: function() {
+        return this.logged_in_user ?
+          null :
+          `https://github.com/login/oauth/authorize?client_id=${this.github_clientid}`
       }
     }
   }

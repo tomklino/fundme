@@ -69,6 +69,11 @@ app.get('/whoami', function(req, res) {
   })
 })
 
+app.post('/logout', function(req, res) {
+  req.session = null;
+  return res.send("logged off successfully");
+})
+
 async function checkAndStartServer(port) {
   try {
     let [ rows ] = await mysqlConnectionPool.query('select * from `Projects`')

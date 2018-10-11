@@ -8,6 +8,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import VueApollo from 'vue-apollo'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import VueResource from 'vue-resource'
 
 import App from './App'
 import AddProject from '@/components/AddProject.vue'
@@ -17,6 +18,7 @@ import AddChallenge from '@/components/AddChallenge.vue'
 
 Vue.config.productionTip = false
 Vue.use(VueRouter)
+Vue.use(VueResource)
 
 /* eslint-disable no-new */
 //TODO routing should be imported from a seperate file
