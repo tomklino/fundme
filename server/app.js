@@ -25,11 +25,15 @@ app = express();
 const mysqlConnectionPool = mysql.createPool(config.get('mysql'))
 
 //serve client application files
-const client_loading_spots = [ '/', '/project/*', '/addproject' ]
+const client_loading_spots = [ '/project/*', '/addproject' ]
 if(config.get('FUNDME_DEV')) {
   app.use(webpackMiddleware(compiler, {
     publicPath: '/'
   }))
+  const proxy = require('express-http-proxy');
+  client_loading_spots.forEach((loading_spot) => {
+    app.use(loading_spot, proxy("localhost:3000/"))
+  })
 } else {
   console.log("PRODUCTION!")
   app.use(express.static(path.join(__dirname, '/../frontend/dist')));
