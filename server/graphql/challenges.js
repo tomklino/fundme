@@ -32,12 +32,6 @@ const ChallengeType = new GraphQLObjectType({
     },
     challenge_type: {
       type: new GraphQLNonNull(GraphQLString)
-    },
-    amout_pledged: {
-      type: new GraphQLNonNull(GraphQLFloat)
-    },
-    currency_symbol: {
-      type: new GraphQLNonNull(GraphQLString)
     }
   })
 })
@@ -60,6 +54,28 @@ const challengeQueries = {
 }
 
 const challengeMutations = {
+  assignUserToChallenge: {
+    type: new GraphQLList(ChallengeType),
+    args: {
+      challenge_id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      user_id: {
+        type: new GraphQLNonNull(GraphQLString)
+      }
+    },
+    resolve: async (root, args, context) => {
+      let { challengeHandler } = context;
+      try {
+        let challenge_id = await challengeHandler.assignUserToChallenge(args)
+        return await challengeHandler.queryChallenge({ challenge_id });
+      } catch(e) {
+        console.error("ERROR: challenges.js: " + e.code)
+        throw e;
+      }
+    }
+  },
+
   addChallenge: {
     type: new GraphQLList(ChallengeType),
     args: {

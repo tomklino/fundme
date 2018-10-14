@@ -17,6 +17,7 @@ const QUERY_CHALLENGES = "SELECT " +
   CHALLENGE_TABLE_FIELDS.join(',') + " FROM `Challenges`"
 const QUERY_CHALLENGES_BY_PROJECT_ID = QUERY_CHALLENGES + " WHERE `project_id`=?"
 const QUERY_CHALLENGES_BY_CHALLENGE_ID = QUERY_CHALLENGES + " WHERE `challenge_id`=?"
+const UPDATE_CHALLENGE_ASSIGNEE = 'UPDATE `Challenges` SET `assignee`=? WHERE `challenge_id`=?;'
 
 function generateChallengeId() {
   return "C-" + randomString.generate(8)
@@ -42,6 +43,22 @@ function challengeHandlerFactory({
     return;
   }
   return {
+    assignUserToChallenge: async function({
+      challenge_id, user_id
+    }) {
+      try {
+        debug(1, "executring query:", UPDATE_CHALLENGE_ASSIGNEE, "args:", challenge_id, user_id)
+        await mysqlConnectionPool.execute(UPDATE_CHALLENGE_ASSIGNEE, [
+          user_id,
+          challenge_id
+        ])
+        return challenge_id;
+      } catch(e) {
+        console.error("ERROR: challenge_handler.js: " + e.code)
+        throw e;
+      }
+    },
+
     createNewChallenge: async function({
       challenge_name,
       project_id,
