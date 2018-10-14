@@ -5,11 +5,13 @@ export const CHALLENGE_MUTATION_CREATE = gql`
     $challenge_name: String!,
     $challenge_type: String!,
     $challenge_description: String,
-    $project_id: String!) {
+    $project_id: String!,
+    $creator: String!) {
       addChallenge(
         challenge_name: $challenge_name,
         challenge_type: $challenge_type,
         challenge_description: $challenge_description,
+        creator: $creator,
         project_id: $project_id) {
           id
       }

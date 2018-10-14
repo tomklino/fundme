@@ -18,6 +18,12 @@ const ChallengeType = new GraphQLObjectType({
     name: {
       type: new GraphQLNonNull(GraphQLString)
     },
+    assignee: {
+      type: GraphQLString
+    },
+    creator: {
+      type: GraphQLString
+    },
     project_id: {
       type: new GraphQLNonNull(GraphQLString)
     },
@@ -67,6 +73,9 @@ const challengeMutations = {
         type: GraphQLString
       },
       project_id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      creator: {
         type: new GraphQLNonNull(GraphQLString)
       }
     },

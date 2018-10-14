@@ -7,8 +7,8 @@ const CHALLENGE_TABLE_FIELDS = [
   "project_id",
   "challenge_type",
   "challenge_description",
-  "amout_pledged",
-  "currency_symbol"
+  "assignee",
+  "creator",
 ]
 const CREATE_NEW_CHALLENGE_STATEMENT = "INSERT INTO `Challenges` (" +
   CHALLENGE_TABLE_FIELDS.join(',') + ") VALUES (" +
@@ -23,14 +23,14 @@ function generateChallengeId() {
 }
 
 function mapDataToResult({
-  challenge_id, challenge_name, project_id, challenge_type, amout_pledged, currency_symbol }) {
+  challenge_id, assignee, creator, challenge_name, project_id, challenge_type }) {
   return {
     id: challenge_id,
     name: challenge_name,
     project_id,
     challenge_type,
-    amout_pledged,
-    currency_symbol
+    assignee,
+    creator
   }
 }
 
@@ -46,7 +46,8 @@ function challengeHandlerFactory({
       challenge_name,
       project_id,
       challenge_type,
-      challenge_description
+      challenge_description,
+      creator
     }) {
       challenge_id = generateChallengeId();
       try {
@@ -56,8 +57,8 @@ function challengeHandlerFactory({
           project_id,
           challenge_type,
           challenge_description ? challenge_description : "",
-          0, //amout_pledged
-          "USD"
+          null,
+          creator
         ])
       } catch(e) {
         console.error("ERROR: challenge_handler.js: " + e.code)

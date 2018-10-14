@@ -25,8 +25,10 @@ CREATE TABLE IF NOT EXISTS `Challenges` (
   `project_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `challenge_type` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `challenge_description` varchar(4096) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `amout_pledged` decimal(13,2) DEFAULT 0.00,
-  `currency_symbol` varchar(64) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT "USD",
+  `assignee` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `creator` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   UNIQUE KEY `challenge_id` (`challenge_id`(64)),
-  FOREIGN KEY (`project_id`) REFERENCES Projects(`project_id`) ON DELETE CASCADE
+  FOREIGN KEY (`project_id`) REFERENCES Projects(`project_id`) ON DELETE CASCADE,
+  FOREIGN KEY (`assignee`) REFERENCES Users(`user_id`) ON DELETE SET NULL,
+  FOREIGN KEY (`creator`) REFERENCES Users(`user_id`) ON DELETE SET NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8;

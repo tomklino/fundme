@@ -43,7 +43,8 @@ export default {
         challenge_name: this.challenge_name,
         challenge_description: this.challenge_description,
         challenge_type: this.challenge_type,
-        project_id: this.$route.params.project_id
+        project_id: this.$route.params.project_id,
+        creator: this.$root.$data.user_id
       })
       this.$router.replace({
         name: 'project',
