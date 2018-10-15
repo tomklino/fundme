@@ -34,13 +34,16 @@ export const CHALLENGE_MUTATION_CREATE = gql`
 `
 
 export const CHALLENGE_QUERY = gql`
-  query ($project_id: String!) {
+  query ChallengeQuery($project_id: String!) {
     challenges(project_id: $project_id) {
       id,
       challenge_type,
       challenge_description,
       name,
-      assignee
+      assignee {
+        id,
+        username
+      }
     }
   }
 `

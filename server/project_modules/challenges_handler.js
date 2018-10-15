@@ -15,23 +15,45 @@ const CREATE_NEW_CHALLENGE_STATEMENT = "INSERT INTO `Challenges` (" +
   CHALLENGE_TABLE_FIELDS.map(f => '?').join(',') + ")"
 const QUERY_CHALLENGES = "SELECT " +
   CHALLENGE_TABLE_FIELDS.join(',') + " FROM `Challenges`"
+const QUERY_CHALLENGES_WITH_NAME_RESOLUTION = "SELECT " +
+  CHALLENGE_TABLE_FIELDS.join(',') + "," +
+  "`assignees`.`github_login` AS assignee_name," +
+  "`creators`.`github_login` AS creator_name " +
+  "FROM `Challenges` " +
+  "LEFT JOIN `Users` `assignees` " +
+  "ON `Challenges`.`assignee` = `assignees`.`user_id` " +
+  "LEFT JOIN `Users` `creators` " +
+  "ON `Challenges`.`creator` = `creators`.`user_id`"
+
 const QUERY_CHALLENGES_BY_PROJECT_ID = QUERY_CHALLENGES + " WHERE `project_id`=?"
+const QUERY_CHALLENGES_WITH_NAME_RESOLUTION_BY_PROJECT_ID =
+  QUERY_CHALLENGES_WITH_NAME_RESOLUTION + " WHERE `project_id`=?"
 const QUERY_CHALLENGES_BY_CHALLENGE_ID = QUERY_CHALLENGES + " WHERE `challenge_id`=?"
 const UPDATE_CHALLENGE_ASSIGNEE = 'UPDATE `Challenges` SET `assignee`=? WHERE `challenge_id`=?;'
+
+//SELECT challenge_id,challenge_name,project_id,challenge_type,challenge_description, assignee ,creator, `assignees`.`github_login` as assignee_name, `creators`.`github_login` as creator_name FROM `Challenges` LEFT JOIN `Users` `assignees` ON `Challenges`.`assignee` = `assignees`.`user_id` LEFT JOIN `Users` `creators` ON `Challenges`.`creator` = `creators`.`user_id`;
 
 function generateChallengeId() {
   return "C-" + randomString.generate(8)
 }
 
-function mapDataToResult({
-  challenge_id, assignee, creator, challenge_name, project_id, challenge_type }) {
+function mapDataToResult(mysql_columns) {
+  debug(2, "mapDataToResult mysql_columns:", mysql_columns)
   return {
-    id: challenge_id,
-    name: challenge_name,
-    project_id,
-    challenge_type,
-    assignee,
-    creator
+    id: mysql_columns.challenge_id,
+    name: mysql_columns.challenge_name,
+    project_id: mysql_columns.project_id,
+    challenge_type: mysql_columns.challenge_type,
+    assignee: mysql_columns.assignee ?
+      {
+        id: mysql_columns.assignee,
+        username: mysql_columns.assignee_name
+      } : null,
+    creator: mysql_columns.creator ?
+      {
+        id: mysql_columns.creator,
+        username: mysql_columns.creator_name
+      } : null
   }
 }
 
@@ -93,8 +115,9 @@ function challengeHandlerFactory({
 
     queryChallenges: async function({ project_id }) {
       debug(1, `queryChallenges called with ${project_id}`)
+      debug(1, "mysql query:", QUERY_CHALLENGES_WITH_NAME_RESOLUTION_BY_PROJECT_ID)
       let [ rows ] = await mysqlConnectionPool.query(
-          QUERY_CHALLENGES_BY_PROJECT_ID, [ project_id ])
+          QUERY_CHALLENGES_WITH_NAME_RESOLUTION_BY_PROJECT_ID, [ project_id ])
       return rows.map(mapDataToResult)
     }
   }

@@ -8,33 +8,7 @@ const {
   GraphQLList
 } = require('graphql');
 
-const ChallengeType = new GraphQLObjectType({
-  name: 'ChallengeType',
-  description: 'Challenge type defintion',
-  fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    assignee: {
-      type: GraphQLString
-    },
-    creator: {
-      type: GraphQLString
-    },
-    project_id: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    challenge_description: {
-      type: GraphQLString
-    },
-    challenge_type: {
-      type: new GraphQLNonNull(GraphQLString)
-    }
-  })
-})
+const { ChallengeType } = require('./types.js')
 
 const challengeQueries = {
   challenges: {
@@ -46,9 +20,12 @@ const challengeQueries = {
     },
     resolve: async (root, args, context) => {
       const { challengeHandler } = context;
-      return await challengeHandler.queryChallenges({
+
+      let challenges_list = await challengeHandler.queryChallenges({
         project_id: args.project_id
       })
+      debug(1, "challenge query resolves to:", challenges_list)
+      return challenges_list;
     }
   }
 }

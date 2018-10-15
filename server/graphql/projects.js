@@ -9,41 +9,7 @@ const {
   GraphQLNonNull
 } = require('graphql');
 
-const UserType = new GraphQLObjectType({
-  name: 'UserType',
-  description: 'User type definition',
-  fields: () => ({
-    id: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    username: {
-      type: new GraphQLNonNull(GraphQLString)
-    }
-  })
-})
-
-const ProjectType = new GraphQLObjectType({
-  name: 'ProjectType',
-  description: 'Project type definition',
-  fields: () => ({
-    id: {
-      //TODO: this should be GraphQLString?
-      type: new GraphQLNonNull(GraphQLID)
-    },
-    name: {
-      type: new GraphQLNonNull(GraphQLString)
-    },
-    owner: {
-      type: new GraphQLNonNull(UserType)
-    },
-    description: {
-      type: GraphQLString
-    },
-    online_repo: {
-      type: GraphQLString
-    }
-  })
-});
+const { UserType, ProjectType } = require('./types.js')
 
 const projectMutations = {
   addProject: {
