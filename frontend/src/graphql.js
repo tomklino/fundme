@@ -1,5 +1,20 @@
 import gql from 'graphql-tag'
 
+export const ASSIGN_CHALLENGE_TO_USER = gql`
+  mutation (
+    $challenge_id: String!,
+    $assignee: String!
+  ) {
+    assignUserToChallenge(
+      challenge_id: $challenge_id,
+      user_id: $assignee
+    ) {
+      id,
+      assignee
+    }
+  }
+  `
+
 export const CHALLENGE_MUTATION_CREATE = gql`
   mutation (
     $challenge_name: String!,
@@ -24,7 +39,8 @@ export const CHALLENGE_QUERY = gql`
       id,
       challenge_type,
       challenge_description,
-      name
+      name,
+      assignee
     }
   }
 `
