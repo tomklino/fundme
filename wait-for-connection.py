@@ -13,9 +13,7 @@ def testConnction(host, port):
     except socket.error as error:
         return False
 
-while True:
-    if testConnction(host, port):
-        break;
+while not testConnction(host, port):
     sleep(1)
     sys.stdout.write('.')
     sys.stdout.flush()
