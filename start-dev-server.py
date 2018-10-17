@@ -38,6 +38,7 @@ print "mysql server ready"
 resulted_config = {
     "mysql": {
         "host": mysql_hostname,
+        "port": mysql_port,
         "password": mysql_password,
         "user": mysql_user,
         "database": mysql_database
