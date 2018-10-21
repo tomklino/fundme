@@ -17,13 +17,6 @@
             </div>
           </v-card-title>
           <v-card-actions>
-            <!-- <v-btn flat primary
-              :to="{
-                name: 'project',
-                params: {
-                  project_id: project.id
-                }
-              }">View</v-btn> -->
             <v-btn v-if="project.online_repo" :href="project.online_repo" depressed color="secondary">See in Github</v-btn>
           </v-card-actions>
         </v-card>
