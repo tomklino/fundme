@@ -18,9 +18,9 @@
         <LogoutButton v-if="$root.$data.isUserLoggedIn"/>
       </v-toolbar-items>
     </v-toolbar>
-    <v-content>
+    <v-content class="test">
       <v-container fluid fill-height>
-        <v-layout>
+        <v-layout justify-center align-center>
         <router-view></router-view>
         </v-layout>
       </v-container>
@@ -83,4 +83,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>

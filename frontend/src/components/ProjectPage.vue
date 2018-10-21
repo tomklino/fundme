@@ -1,18 +1,20 @@
 <template>
-  <div>
-    <h1>{{project.name}}</h1>
-    <v-btn flat primary
-      :to="{
-        name: 'add_challenge',
-        params: {
-          project_id
-        }
-      }">
-        <v-icon>note_add</v-icon>
-    </v-btn>
+  <div class="projectPage">
+    <h1 class="projectTitle">{{project.name}}</h1>
     <div class="description">{{project.description}}
     </div>
     <ChallengeList></ChallengeList>
+    <v-flex x12>
+      <v-btn block depressed color="info"
+        :to="{
+          name: 'add_challenge',
+          params: {
+            project_id
+          }
+        }">
+          Add new challenge
+      </v-btn>
+    </v-flex>
   </div>
 </template>
 
@@ -48,6 +50,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .projectPage {
+    width: 600px;
+  }
 
+  .projectTitle{
+    font-size: 40px;
+  }
 
 </style>

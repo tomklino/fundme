@@ -14,9 +14,9 @@
       <v-list-tile-content>
         <v-list-tile-title v-text="challenge.name"></v-list-tile-title>
       </v-list-tile-content>
-      <v-list-tile-content>
-        <v-btn v-if="challenge.assignee === null" @click="assignToMe(challenge.id)">Assign to me</v-btn>
-      </v-list-tile-content>
+
+        <v-btn depressed color="primary" v-if="challenge.assignee === null" @click="assignToMe(challenge.id)">Assign to me</v-btn>
+
     </v-list-tile>
   </v-list>
 </template>
@@ -71,11 +71,6 @@ export default {
 </script>
 
 <style scoped>
-.description {
 
-}
-.username {
-  padding-top: 18px;
-  font-size: 14px;
-}
+
 </style>

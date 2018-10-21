@@ -2,7 +2,13 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex v-for="project in projects" xs4 :key="project.id">
-        <v-card color="green lighten-1">
+        <v-card :to="{
+          name: 'project',
+          params: {
+            project_id: project.id
+          }
+        }"
+        class="card" :color="pseudoRandomColor(project.id)">
           <v-card-title primary-title>
             <div>
               <h3 class="headline mb-0">{{project.name}}</h3>
@@ -11,14 +17,14 @@
             </div>
           </v-card-title>
           <v-card-actions>
-            <v-btn flat primary
+            <!-- <v-btn flat primary
               :to="{
                 name: 'project',
                 params: {
                   project_id: project.id
                 }
-              }">View</v-btn>
-            <v-btn v-if="project.online_repo" :href="project.online_repo" flat dark>See in github</v-btn>
+              }">View</v-btn> -->
+            <v-btn v-if="project.online_repo" :href="project.online_repo" depressed color="secondary">See in Github</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -49,6 +55,9 @@ export default {
         console.log(JSON.stringify(data))
         this.projects = data.projects
       })
+    },
+    pseudoRandomColor(seed) {
+      return "cyan lighten-1";
     }
   }
 }
@@ -61,5 +70,10 @@ export default {
 .username {
   padding-top: 18px;
   font-size: 14px;
+}
+
+.card:hover{
+  opacity: 0.8;
+  cursor: pointer;
 }
 </style>

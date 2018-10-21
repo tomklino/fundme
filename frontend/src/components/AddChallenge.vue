@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="addChallenge">
     <v-form v-model="valid">
       <v-text-field
         v-model="challenge_name"
@@ -86,5 +86,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.addChallenge {
+  width: 600px;
+}
 </style>
