@@ -1,19 +1,22 @@
 <template>
   <div>
-    <h1>Link a project to Voost</h1>
-    <v-list two-line>
-      <v-list-tile
-        v-for="(project, index) in projects"
-        :key="project.name"
-        avatar
-        @click="verifyAddProjectDialog = true; project_to_add = project"
-      >
-        <v-list-tile-content>
-          <v-list-tile-title v-html="project.name"></v-list-tile-title>
-          <v-list-tile-sub-title v-html="project.description"></v-list-tile-sub-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+    <h1>Add project</h1>
+    <div class="instructions">Choose one of your repos to link to voost:</div>
+    <v-card>
+      <v-list two-line>
+        <v-list-tile
+          v-for="(project, index) in projects"
+          :key="project.name"
+          avatar
+          @click="verifyAddProjectDialog = true; project_to_add = project"
+        >
+          <v-list-tile-content>
+            <v-list-tile-title v-html="project.name"></v-list-tile-title>
+            <v-list-tile-sub-title v-html="project.description"></v-list-tile-sub-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-card>
 
     <v-dialog
         v-model="verifyAddProjectDialog"
@@ -129,5 +132,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+ .instructions{
+   margin: 4px auto 16px;
+   font-size: 17px;
+ }
 </style>

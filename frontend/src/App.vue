@@ -1,15 +1,15 @@
 <template>
   <v-app id="inspire">
     <v-toolbar color="indigo" dark fixed app>
-      <v-toolbar-title>Voost.io</v-toolbar-title>
+      <router-link :to=" { name: 'home' }" tag="div" class="logo">
+        <v-toolbar-title>Voost.io</v-toolbar-title>
+      </router-link>
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-btn v-if="$root.$data.username"
           flat :to=" { name: 'Add_Project' }">
           <v-icon>add_circle</v-icon>
-        </v-btn>
-        <v-btn flat :to=" { name: 'home' }">
-          <v-icon>home</v-icon>
+          <span>&nbsp;Add project</span>
         </v-btn>
         <SignInWithGithub
           github_clientid="5c6f1bd40f1841f1674a"
@@ -83,5 +83,11 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.logo {
+  cursor: pointer;
+}
+
+
 
 </style>
