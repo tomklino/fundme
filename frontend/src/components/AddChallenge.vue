@@ -1,29 +1,33 @@
 <template>
-  <div class="addChallenge">
-    <v-form v-model="valid">
-      <v-text-field
-        v-model="challenge_name"
-        label="Challenge Name"
-        required>
-      </v-text-field>
-      <v-select
-        v-model="challenge_type"
-        :items="challenge_types"
-        label="Challenge Type"
-        >
-      </v-select>
-      <v-textarea
-        v-model="challenge_description"
-        auto-grow
-        box
-        label="Description"
-        rows="4"
-      ></v-textarea>
-      <v-btn @click="sumbitChallenge" :disabled="sumbit_button_disabled">
-        <v-progress-circular v-if="sumbit_button_disabled" />
-        {{ sumbit_button_text }}
-      </v-btn>
-    </v-form>
+  <div>
+    <h1>Add challenge</h1>
+    <div class="instructions">Fill challenge details to add it to the project</div>
+    <v-card class="addChallenge">
+      <v-form v-model="valid">
+          <v-text-field
+            v-model="challenge_name"
+            label="Challenge Name"
+            required>
+          </v-text-field>
+          <v-select
+            v-model="challenge_type"
+            :items="challenge_types"
+            label="Challenge Type"
+            >
+          </v-select>
+          <v-textarea
+            v-model="challenge_description"
+            auto-grow
+            box
+            label="Description"
+            rows="4"
+          ></v-textarea>
+          <v-btn @click="sumbitChallenge" :disabled="sumbit_button_disabled" color="success">
+            <v-progress-circular v-if="sumbit_button_disabled" />
+            {{ sumbit_button_text }}
+          </v-btn>
+      </v-form>
+    </v-card>
   </div>
 </template>
 
@@ -88,5 +92,12 @@ export default {
 <style scoped>
 .addChallenge {
   width: 600px;
+  padding: 20px;
 }
+
+.instructions{
+  margin: 4px auto 16px;
+  font-size: 17px;
+}
+
 </style>
