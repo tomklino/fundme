@@ -3,29 +3,29 @@
     <h1 class="projectTitle">{{project.name}}</h1>
     <div class="description">{{project.description}}
     </div>
-    <ChallengeList></ChallengeList>
+    <ChallengeList ref="challengesList"></ChallengeList>
     <v-flex x12>
       <v-btn block depressed color="info"
-        :to="{
-          name: 'add_challenge',
-          params: {
-            project_id
-          }
-        }">
+        @click="add_new_challenge_dialog = true">
           Add new challenge
       </v-btn>
     </v-flex>
+    <v-dialog max-width="600" v-model="add_new_challenge_dialog">
+      <AddChallenge v-on:submitted="onSubmit"></AddChallenge>
+    </v-dialog>
   </div>
 </template>
 
 <script>
 import { PROJECT_QUERY_BY_ID } from '@/graphql'
 import ChallengeList from '@/components/ChallengeList'
+import AddChallenge from '@/components/AddChallenge'
 
 export default {
   name: 'ProjectPage',
   components: {
-    ChallengeList
+    ChallengeList,
+    AddChallenge
   },
   mounted () {
     console.dir(this.$route.params['project_id'])
@@ -42,7 +42,15 @@ export default {
   data () {
     return {
       project: {},
+      add_new_challenge_dialog: false,
       ...this.$route.params
+    }
+  },
+
+  methods: {
+    onSubmit() {
+       this.$refs.challengesList.searchChallenges();
+       this.add_new_challenge_dialog = false;
     }
   }
 }
@@ -51,7 +59,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .projectPage {
-    width: 600px;
+    width: 824px;
   }
 
   .projectTitle{

@@ -1,24 +1,28 @@
 <template>
-  <v-list>
-    <v-list-tile
-      v-for="challenge in challenges"
-      :key="challenge.title"
-      avatar
-      @click=""
-    >
-      <v-list-tile-action>
-        <v-icon v-if="challenge.challenge_type === 'Feature'" color="cyan 100">star</v-icon>
-        <v-icon v-if="challenge.challenge_type === 'Bug'" color="lime 500">bug_report</v-icon>
-      </v-list-tile-action>
+  <v-card v-if="challenges.length">
+    <v-list class="challengesList">
+      <v-list-tile
+        v-for="challenge in challenges"
+        :key="challenge.title"
+        avatar
+        @click=""
+      >
+        <v-list-tile-action>
+          <v-icon v-if="challenge.challenge_type === 'Feature'" color="cyan 100">star</v-icon>
+          <v-icon v-if="challenge.challenge_type === 'Bug'" color="lime 500">bug_report</v-icon>
+        </v-list-tile-action>
 
-      <v-list-tile-content>
-        <v-list-tile-title v-text="challenge.name"></v-list-tile-title>
-      </v-list-tile-content>
+        <v-list-tile-content>
+          <v-list-tile-title v-text="challenge.name"></v-list-tile-title>
+        </v-list-tile-content>
 
-        <v-btn depressed color="primary" v-if="challenge.assignee === null" @click="assignToMe(challenge.id)">Assign to me</v-btn>
-
-    </v-list-tile>
-  </v-list>
+        <v-list-tile-content>
+          <div class="pledgedSum">30$</div>
+        </v-list-tile-content>
+        <v-btn depressed color="info">Pledge</v-btn>
+      </v-list-tile>
+    </v-list>
+  </v-card>
 </template>
 
 <script>
@@ -71,6 +75,14 @@ export default {
 </script>
 
 <style scoped>
+  .pledgedSum {
+    width: 100%;
+    text-align: right;
+    padding-right: 11px;
+  }
 
+  .challengesList{
+    margin-top: 20px;
+  }
 
 </style>

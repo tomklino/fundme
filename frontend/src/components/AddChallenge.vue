@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <h1>Add challenge</h1>
-    <div class="instructions">Fill challenge details to add it to the project</div>
     <v-card class="addChallenge">
-      <v-form v-model="valid">
+      <v-form ref="form" v-model="valid">
           <v-text-field
             v-model="challenge_name"
             label="Challenge Name"
@@ -28,7 +25,6 @@
           </v-btn>
       </v-form>
     </v-card>
-  </div>
 </template>
 
 <script>
@@ -50,10 +46,10 @@ export default {
         project_id: this.$route.params.project_id,
         creator: this.$root.$data.user_id
       })
-      this.$router.replace({
-        name: 'project',
-        params: { project_id: this.$route.params.project_id }
-      });
+      this.$emit('submitted');
+      this.$refs.form.reset();
+      this.sumbit_button_text = "Submit";
+      this.sumbit_button_disabled = false;
     },
 
     addChallenge: async function (variables) {

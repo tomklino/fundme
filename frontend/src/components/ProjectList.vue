@@ -2,7 +2,7 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex v-for="project in projects" xs4 :key="project.id">
-        <v-card tag="div" height=230 class="projectCard"
+        <v-card ripple tag="div" height=230 class="projectCard"
         :color="pseudoRandomColor(project.id)" :to="{
           name: 'project',
           params: {
