@@ -2,13 +2,14 @@
   <v-container grid-list-md>
     <v-layout row wrap>
       <v-flex v-for="project in projects" xs4 :key="project.id">
-        <v-card :to="{
+        <v-card tag="div" height=230 class="projectCard"
+        :color="pseudoRandomColor(project.id)" :to="{
           name: 'project',
           params: {
             project_id: project.id
           }
         }"
-        class="card" :color="pseudoRandomColor(project.id)">
+        >
           <v-card-title primary-title>
             <div>
               <h3 class="headline mb-0">{{project.name}}</h3>
@@ -16,8 +17,8 @@
               <div class="username blue-grey--text text--darken-2">{{project.owner.username}}</div>
             </div>
           </v-card-title>
-          <v-card-actions>
-            <v-btn v-if="project.online_repo" :href="project.online_repo" depressed color="secondary">See in Github</v-btn>
+          <v-card-actions class="actions">
+            <v-btn v-on:click="(e) => e.stopPropagation()" v-if="project.online_repo" :href="project.online_repo" depressed color="secondary">See in Github</v-btn>
           </v-card-actions>
         </v-card>
       </v-flex>
@@ -65,8 +66,18 @@ export default {
   font-size: 14px;
 }
 
-.card:hover{
+.projectCard:hover{
   opacity: 0.8;
   cursor: pointer;
+}
+
+.projectCard{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.actions{
+  flex-direction: row-reverse;
 }
 </style>
