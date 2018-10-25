@@ -32,7 +32,7 @@ export default {
   name: 'ChallengeList',
   mounted () {
     console.log("ChallengeList mounted")
-    this.searchChallenges();
+    this.fetchChallenges();
   },
   data () {
     return {
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    searchChallenges(event) {
+    fetchChallenges(event) {
       this.$apollo.query({
         query: CHALLENGE_QUERY,
         variables: {
@@ -67,7 +67,7 @@ export default {
         }]
       }).then((data) => {
         console.log("assigned to user:", data)
-        this.searchChallenges()
+        this.fetchChallenges()
       })
     }
   }

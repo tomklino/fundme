@@ -49,7 +49,7 @@ export default {
 
   methods: {
     onSubmit() {
-       this.$refs.challengesList.searchChallenges();
+       this.$refs.challengesList.fetchChallenges();
        this.add_new_challenge_dialog = false;
     }
   }
