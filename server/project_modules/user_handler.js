@@ -7,12 +7,27 @@ const QUERY_USER_BY_GITHUB_ID =
   "SELECT * FROM `Users` WHERE `github_id`=?"
 const CREATE_NEW_USER_STATEMENT =
   "INSERT INTO `Users` (user_id, github_id, github_login, github_access_token) VALUES (?,?,?,?)"
+const UPDATE_USER_ACCOUNT =
+  "UPDATE `Users` SET `account_token` = ? WHERE `user_id` = ?"
 
 function generateUserId() {
   return "U-" + randomString.generate(7);
 }
 
 function userHandlerFactory({ mysqlConnectionPool }) {
+  async function updateUserAccount({ user_id, account_token }) {
+    debug(1, "updateUserAccount: user_id:", user_id, "account_token:", account_token)
+    try {
+      await mysqlConnectionPool.execute(UPDATE_USER_ACCOUNT, [
+        account_token, user_id
+      ])
+    } catch(err) {
+      debug(1, err)
+      throw err;
+    }
+    return true;
+  }
+
   async function isUserIdExists({ user_id }) {
     return ( (await findUserById({ user_id })) !== null )
   }
@@ -40,14 +55,16 @@ function userHandlerFactory({ mysqlConnectionPool }) {
         github_login,
         github_access_token
       ])
-    } catch(e) {
-      return e;
+    } catch(err) {
+      debug(1, err)
+      throw err;
     }
 
     return user_id;
   }
 
   async function findUserById({ user_id }) {
+    debug(1, "findUserById: user_id:", user_id)
     const [ rows ] = await mysqlConnectionPool.query(QUERY_USER_BY_ID, [
       user_id
     ]);
@@ -55,6 +72,7 @@ function userHandlerFactory({ mysqlConnectionPool }) {
     if (rows.length === 0) {
       return null
     }
+    debug(1, "findUserById returning:", rows[0])
     return rows[0]
   }
 
@@ -72,6 +90,7 @@ function userHandlerFactory({ mysqlConnectionPool }) {
   return {
     createUser,
     findUserById,
+    updateUserAccount,
     findUserByGithubId
   }
 }

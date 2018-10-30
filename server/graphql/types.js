@@ -1,8 +1,22 @@
 const {
   GraphQLString,
   GraphQLObjectType,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLFloat,
 } = require('graphql');
+
+const WalletType = new GraphQLObjectType({
+  name: 'WalletType',
+  description: 'Wallet type definition',
+  fields: () => ({
+    value: {
+      type: new GraphQLNonNull(GraphQLFloat)
+    },
+    currency_symbol: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  })
+})
 
 const UserType = new GraphQLObjectType({
   name: 'UserType',
@@ -69,5 +83,5 @@ const ChallengeType = new GraphQLObjectType({
 })
 
 module.exports = {
-  UserType, ProjectType, ChallengeType
+  UserType, ProjectType, ChallengeType, WalletType
 }

@@ -5,13 +5,15 @@ const {
 
 const { challengeQueries, challengeMutations } = require('./challenges.js')
 const { projectQueries, projectMutations } = require('./projects.js')
+const { walletQueries } = require('./wallet.js')
 
 module.exports = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
     fields: () => ({
       ...challengeQueries,
-      ...projectQueries
+      ...projectQueries,
+      ...walletQueries
     })
   }),
   mutation: new GraphQLObjectType({

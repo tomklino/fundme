@@ -9,6 +9,7 @@ const projectsHandlerFactory = require('./project_modules/projects_handler.js');
 const challengeHandlerFactory = require('./project_modules/challenges_handler.js');
 const userHandlerFactory = require('./project_modules/user_handler.js');
 const githubLoginHandlerFactory = require('./project_modules/github_login.js');
+const walletFactory = require('./project_modules/wallet.js');
 const schema = require('./graphql/schema.js');
 
 const webpackConfig = require('./webpack.config.js')
@@ -44,6 +45,8 @@ app.use(cookieSession({
   signed: true
 }))
 
+const userHandler = userHandlerFactory({ mysqlConnectionPool });
+
 const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
   return {
     schema,
@@ -51,7 +54,9 @@ const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
     context: {
       session: request.session,
       projectsHandler: projectsHandlerFactory({ mysqlConnectionPool }),
-      challengeHandler: challengeHandlerFactory({ mysqlConnectionPool })
+      challengeHandler: challengeHandlerFactory({ mysqlConnectionPool }),
+      userHandler,
+      wallet: walletFactory({ payment_gateway_url: config.get('payment_gateway_url') })
     }
   }
 })
@@ -60,7 +65,7 @@ app.use('/graphql', graphqlHTTPInstance)
 const githubLoginHandler = githubLoginHandlerFactory({
   client_id: config.get('github').client_id,
   client_secret: config.get('github').client_secret,
-  userHandler: userHandlerFactory({ mysqlConnectionPool })
+  userHandler
 })
 app.use('/login/github_callback', githubLoginHandler)
 
