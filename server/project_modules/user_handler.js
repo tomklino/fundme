@@ -14,7 +14,9 @@ function generateUserId() {
   return "U-" + randomString.generate(7);
 }
 
-function userHandlerFactory({ mysqlConnectionPool, wallet }) {
+function userHandlerFactory({ mysqlConnectionPool, wallet, options }) {
+  options = options || {};
+  const { newUserGift } = options;
   async function updateUserAccount({ user_id, account_token }) {
     debug(1, "updateUserAccount: user_id:", user_id, "account_token:", account_token)
     try {
@@ -65,6 +67,10 @@ function userHandlerFactory({ mysqlConnectionPool, wallet }) {
     wallet.createAccount({ account_name: `user account ${user_id}`})
       .then((account_token) => {
         updateUserAccount({ user_id, account_token })
+        if(newUserGift) {
+          debug(1, "newUserGift:", newUserGift)
+          wallet.addCoupon({ account_token, value: newUserGift })
+        }
       })
       .catch((err) => {
         debug(1, "error while creating account for user", user_id, err.code)

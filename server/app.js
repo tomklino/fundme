@@ -24,7 +24,8 @@ const config = configLoader({ home_dir: __dirname })
 const mysqlConnectionPool = mysql.createPool(config.get('mysql'))
 
 const wallet = walletFactory({ payment_gateway_url: config.get('payment_gateway_url') })
-const userHandler = userHandlerFactory({ mysqlConnectionPool, wallet });
+const userHandler = userHandlerFactory({
+  mysqlConnectionPool, wallet, options: config.get('user_handler_options') });
 const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
 const challengeHandler = challengeHandlerFactory({ mysqlConnectionPool });
 

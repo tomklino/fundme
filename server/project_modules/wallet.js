@@ -9,11 +9,34 @@ function walletFactory({ payment_gateway_url }) {
     },
     createAccount(args) {
       return _createAccount(payment_gateway_url, args)
+    },
+    addCoupon(args) {
+      return _addCoupon(payment_gateway_url, args)
     }
   }
 }
 
 module.exports = walletFactory;
+
+async function _addCoupon(payment_gateway_url, args) {
+  const { account_token, value, currency_symbol = "USD" } = args;
+
+  try {
+    var response =
+      await request
+      .post(`${payment_gateway_url}/add_coupon`)
+      .send({
+        destination_account: account_token,
+        value,
+        currency_symbol
+      })
+  } catch(err) {
+    debug(1, err.code)
+    throw err;
+  }
+
+  return account_token;
+}
 
 async function _createAccount(payment_gateway_url, args) {
   const { account_name } = args;
@@ -25,7 +48,7 @@ async function _createAccount(payment_gateway_url, args) {
       .post(`${payment_gateway_url}/create`)
       .send({ account_name })
   } catch(err) {
-    debug(1, err)
+    debug(1, err.code)
     throw err;
   }
 
