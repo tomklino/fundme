@@ -1,5 +1,13 @@
 import gql from 'graphql-tag'
 
+export const WALLET_TOTAL_QUERY = gql`
+  query {
+    wallet_total {
+      value, currency_symbol
+    }
+  }
+`
+
 export const ASSIGN_CHALLENGE_TO_USER = gql`
   mutation (
     $challenge_id: String!,

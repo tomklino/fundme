@@ -6,6 +6,7 @@
       </router-link>
       <v-spacer></v-spacer>
       <v-toolbar-items>
+        <CouponWallet v-if="$root.$data.username"></CouponWallet>
         <v-btn v-if="$root.$data.username"
           flat :to=" { name: 'Add_Project' }">
           <v-icon>add_circle</v-icon>
@@ -36,6 +37,7 @@ import ProjectList from '@/components/ProjectList'
 import ProjectAboutBox from '@/components/ProjectAboutBox'
 import SignInWithGithub from '@/components/SignInWithGithub'
 import LogoutButton from '@/components/LogoutButton'
+import CouponWallet from '@/components/CouponWallet'
 
 export default {
   name: 'App',
@@ -62,7 +64,8 @@ export default {
   },
   components: {
     SignInWithGithub,
-    LogoutButton
+    LogoutButton,
+    CouponWallet
   }
 }
 </script>
