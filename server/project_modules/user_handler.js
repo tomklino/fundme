@@ -14,7 +14,7 @@ function generateUserId() {
   return "U-" + randomString.generate(7);
 }
 
-function userHandlerFactory({ mysqlConnectionPool }) {
+function userHandlerFactory({ mysqlConnectionPool, wallet }) {
   async function updateUserAccount({ user_id, account_token }) {
     debug(1, "updateUserAccount: user_id:", user_id, "account_token:", account_token)
     try {
@@ -59,6 +59,16 @@ function userHandlerFactory({ mysqlConnectionPool }) {
       debug(1, err)
       throw err;
     }
+
+    //NOTE: deliberatly not using await. we return the user_id to the client
+    //      and wait for account creation in the backgound
+    wallet.createAccount({ account_name: `user account ${user_id}`})
+      .then((account_token) => {
+        updateUserAccount({ user_id, account_token })
+      })
+      .catch((err) => {
+        debug(1, "error while creating account for user", user_id, err.code)
+      })
 
     return user_id;
   }

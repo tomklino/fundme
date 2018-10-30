@@ -21,9 +21,14 @@ const configLoader = require('./config-loader.js')
 
 const config = configLoader({ home_dir: __dirname })
 
-app = express();
-
 const mysqlConnectionPool = mysql.createPool(config.get('mysql'))
+
+const wallet = walletFactory({ payment_gateway_url: config.get('payment_gateway_url') })
+const userHandler = userHandlerFactory({ mysqlConnectionPool, wallet });
+const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
+const challengeHandler = challengeHandlerFactory({ mysqlConnectionPool });
+
+app = express();
 
 //serve client application files
 const client_loading_spots = [ '/project/*', '/addproject' ]
@@ -45,18 +50,16 @@ app.use(cookieSession({
   signed: true
 }))
 
-const userHandler = userHandlerFactory({ mysqlConnectionPool });
-
 const graphqlHTTPInstance = graphqlHTTP((request, response, graphQLParams) => {
   return {
     schema,
     graphiql: true,
     context: {
       session: request.session,
-      projectsHandler: projectsHandlerFactory({ mysqlConnectionPool }),
-      challengeHandler: challengeHandlerFactory({ mysqlConnectionPool }),
+      projectsHandler,
+      challengeHandler,
       userHandler,
-      wallet: walletFactory({ payment_gateway_url: config.get('payment_gateway_url') })
+      wallet
     }
   }
 })

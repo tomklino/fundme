@@ -27,12 +27,8 @@ const walletQueries = {
 
       //TODO creation of account should be done seperately and if not account token found should answer with an error
       if(!account_token) {
-        debug(1, "user does not have an account. creating...")
-        account_token = await wallet.createAccount({
-          account_name: `user account ${user_id}`
-        });
-        debug(1, "created account. account_token:", account_token)
-        await userHandler.updateUserAccount({ user_id, account_token })
+        debug(1, "user does not have an account. returning");
+        return null;
       }
 
       let wallet_total = await wallet.getWalletTotal({ account_token })
