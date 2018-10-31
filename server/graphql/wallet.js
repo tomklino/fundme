@@ -18,14 +18,11 @@ const walletQueries = {
       }
 
       const { user_id } = session;
-      debug(1, "user_id", user_id)
       const user_data =
         await userHandler.findUserById({ user_id })
-      debug(1, "user_data", user_data)
       let { account_token } = user_data;
-      debug(1, "account_token:", account_token, !!account_token)
 
-      //TODO creation of account should be done seperately and if not account token found should answer with an error
+      //// FIXME: handle this as an error
       if(!account_token) {
         debug(1, "user does not have an account. returning");
         return null;
