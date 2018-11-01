@@ -43,7 +43,13 @@ if(config.get('FUNDME_DEV')) {
   })
 } else {
   console.log("PRODUCTION!")
-  app.use(express.static(path.join(__dirname, '/../frontend/dist')));
+  const frontend_production_dir = path.join(__dirname, '/../frontend/dist');
+  const index_html_file = fs.readFileSync(path.join(frontend_production_dir, 'index.html'), 'utf8')
+
+  app.use(express.static(frontend_production_dir));
+  app.get(client_loading_spots, (req, res) => {
+    res.send(index_html_file)
+  })
 }
 
 app.use(cookieSession({
