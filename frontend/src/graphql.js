@@ -8,6 +8,22 @@ export const WALLET_TOTAL_QUERY = gql`
   }
 `
 
+export const PLEDGE_TO_CHALLENGE = gql`
+  mutation pledgeToChallenge (
+    $challenge_id: String!,
+    $amount: Float!,
+    $currency_symbol: String
+  ) {
+    pledgeToChallenge(
+      challenge_id: $challenge_id,
+      amount: $amount,
+      currency_symbol: $currency_symbol
+    ) {
+      value
+    }
+  }
+`
+
 export const ASSIGN_CHALLENGE_TO_USER = gql`
   mutation (
     $challenge_id: String!,
@@ -51,6 +67,9 @@ export const CHALLENGE_QUERY = gql`
       assignee {
         id,
         username
+      },
+      pledged {
+        value
       }
     }
   }

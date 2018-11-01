@@ -18,7 +18,7 @@
           </v-list-tile-content>
 
           <v-list-tile-content>
-            <div class="pledgedSum">30$</div>
+            <div class="pledgedSum">{{ challenge.pledged ? challenge.pledged.value : 0 }}$</div>
           </v-list-tile-content>
           <v-btn depressed color="info" @click="pledgeDialog = true; challenge_to_pledge = challenge">
             Pledge
@@ -29,7 +29,7 @@
     <v-dialog v-model="pledgeDialog" max-width="600">
       <v-card>
         <v-card-title class="headline">Pledge to {{challenge_to_pledge.name}}</v-card-title>
-        <v-form ref="form" v-model="valid" class="pledgeForm">
+        <v-form ref="form" class="pledgeForm">
             <div class="sumContainer">
               <v-text-field
                 class="pledgeField pledgeSum"
@@ -42,7 +42,7 @@
             <v-spacer></v-spacer>
             <div>Pay via</div>
             <v-card-actions>
-              <v-btn>Coupon Wallet</v-btn>
+              <v-btn @click="applyPledge()">Coupon Wallet</v-btn>
               <v-btn disabled>Paypal</v-btn>
               <v-btn disabled>Stripe</v-btn>
             </v-card-actions>
@@ -53,7 +53,11 @@
 </template>
 
 <script>
-import { CHALLENGE_QUERY, ASSIGN_CHALLENGE_TO_USER } from '@/graphql'
+import {
+  CHALLENGE_QUERY,
+  ASSIGN_CHALLENGE_TO_USER,
+  PLEDGE_TO_CHALLENGE
+ } from '@/graphql'
 
 export default {
   name: 'ChallengeList',
@@ -70,6 +74,33 @@ export default {
     }
   },
   methods: {
+    applyPledge() {
+      console.log("applyPledge clicked")
+      let { id: challenge_id } = this.challenge_to_pledge;
+      console.log("applyPledge challenge", challenge_id)
+      this.pledgeToChallenge({ challenge_id, amount: this.pledge_amount })
+      this.pledgeDialog = false;
+    },
+    pledgeToChallenge(args) {
+      const { challenge_id, amount } = args;
+      console.log("pledge to", challenge_id)
+      this.$apollo.mutate({
+        mutation: PLEDGE_TO_CHALLENGE,
+        variables: {
+          challenge_id, amount
+        },
+        awaitRefetchQueries: true,
+        refetchQueries: [{
+          query: CHALLENGE_QUERY,
+          variables: {
+            project_id: this.$route.params.project_id
+          }
+        }]
+      }).then((data) => {
+        console.log("pleged successfuly");
+        this.fetchChallenges();
+      })
+    },
     fetchChallenges(event) {
       this.$apollo.query({
         query: CHALLENGE_QUERY,
