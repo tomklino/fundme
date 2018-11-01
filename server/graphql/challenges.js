@@ -47,6 +47,7 @@ const challengeMutations = {
     resolve: async(root, args, context) => {
       let { userHandler, challengeHandler, wallet, session } = context;
       let { challenge_id, amount, currency_symbol = "USD" } = args;
+      debug(1, "pledging to challenge called with args:", args)
       if(!session.user_id) {
         debug(1, "not logged in")
         return null;

@@ -36,7 +36,6 @@ const ProjectType = new GraphQLObjectType({
   description: 'Project type definition',
   fields: () => ({
     id: {
-      //TODO: this should be GraphQLString?
       type: new GraphQLNonNull(GraphQLString)
     },
     name: {
