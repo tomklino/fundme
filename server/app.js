@@ -27,7 +27,7 @@ const wallet = walletFactory({ payment_gateway_url: config.get('payment_gateway_
 const userHandler = userHandlerFactory({
   mysqlConnectionPool, wallet, options: config.get('user_handler_options') });
 const projectsHandler = projectsHandlerFactory({ mysqlConnectionPool });
-const challengeHandler = challengeHandlerFactory({ mysqlConnectionPool });
+const challengeHandler = challengeHandlerFactory({ mysqlConnectionPool, wallet });
 
 app = express();
 

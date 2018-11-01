@@ -8,7 +8,7 @@ const {
   GraphQLList
 } = require('graphql');
 
-const { ChallengeType } = require('./types.js')
+const { ChallengeType, WalletType } = require('./types.js')
 
 const challengeQueries = {
   challenges: {
@@ -31,6 +31,51 @@ const challengeQueries = {
 }
 
 const challengeMutations = {
+  pledgeToChallenge: {
+    type: WalletType,
+    args: {
+      challenge_id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      amount: {
+        type: new GraphQLNonNull(GraphQLFloat)
+      },
+      currency_symbol: {
+        type: GraphQLString
+      }
+    },
+    resolve: async(root, args, context) => {
+      let { userHandler, challengeHandler, wallet, session } = context;
+      let { challenge_id, amount, currency_symbol = "USD" } = args;
+      if(!session.user_id) {
+        debug(1, "not logged in")
+        return null;
+      }
+
+      let challenge_account_token =
+        await challengeHandler.getOrCreateChallengeAccount({ challenge_id })
+      let { account_token: user_account_token } =
+        await userHandler.findUserById({ user_id: session.user_id })
+
+      try {
+        await wallet.transfer({
+          source_account: user_account_token,
+          destination_account: challenge_account_token,
+          amount,
+          amount_currency: currency_symbol
+        })
+      } catch(err) {
+        debug(1, "error while transfering:", err.code)
+        // TODO: return a valuable error message so the reason could be displayed to the user
+        return null;
+      }
+
+      return await wallet.getWalletTotal({
+        account_token: challenge_account_token
+      })
+    }
+  },
+
   assignUserToChallenge: {
     type: new GraphQLList(ChallengeType),
     args: {

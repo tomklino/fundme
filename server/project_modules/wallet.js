@@ -12,11 +12,33 @@ function walletFactory({ payment_gateway_url }) {
     },
     addCoupon(args) {
       return _addCoupon(payment_gateway_url, args)
+    },
+    transfer(args) {
+      return _transfer(payment_gateway_url, args)
     }
   }
 }
 
 module.exports = walletFactory;
+
+async function _transfer(payment_gateway_url, args) {
+  const { source_account, destination_account, amount, amount_currency } = args;
+
+  try {
+    var response =
+      await request
+      .post(`${payment_gateway_url}/transfer`)
+      .send({
+        source_account,
+        destination_account,
+        amount,
+        amount_currency
+      })
+  } catch(err) {
+    debug(1, err.code);
+    throw err;
+  }
+}
 
 async function _addCoupon(payment_gateway_url, args) {
   const { account_token, value, currency_symbol = "USD" } = args;

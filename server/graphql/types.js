@@ -78,6 +78,9 @@ const ChallengeType = new GraphQLObjectType({
     },
     challenge_type: {
       type: new GraphQLNonNull(GraphQLString)
+    },
+    pledged: {
+      type: WalletType
     }
   })
 })
