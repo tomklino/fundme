@@ -12,10 +12,7 @@ const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const walletFactory = require('./project_modules/wallet.js');
 const schema = require('./graphql/schema.js');
 
-const webpackConfig = require('./webpack.config.js')
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const compiler = webpack(webpackConfig);
+
 
 const configLoader = require('./config-loader.js')
 
@@ -34,6 +31,11 @@ app = express();
 //serve client application files
 const client_loading_spots = [ '/project/*', '/addproject' ]
 if(config.get('FUNDME_DEV')) {
+  const webpackConfig = require('./webpack.config.js')
+  const webpack = require('webpack');
+  const webpackMiddleware = require('webpack-dev-middleware');
+  const compiler = webpack(webpackConfig);
+  
   app.use(webpackMiddleware(compiler, {
     publicPath: '/'
   }))
