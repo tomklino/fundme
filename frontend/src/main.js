@@ -49,7 +49,7 @@ const router = new VueRouter({
 })
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost:3000/graphql'
+  uri: '/graphql'
 })
 
 const apolloClient = new ApolloClient({

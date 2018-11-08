@@ -12,8 +12,6 @@ const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const walletFactory = require('./project_modules/wallet.js');
 const schema = require('./graphql/schema.js');
 
-
-
 const configLoader = require('./config-loader.js')
 
 const config = configLoader({ home_dir: __dirname })
@@ -35,7 +33,7 @@ if(config.get('FUNDME_DEV')) {
   const webpack = require('webpack');
   const webpackMiddleware = require('webpack-dev-middleware');
   const compiler = webpack(webpackConfig);
-  
+
   app.use(webpackMiddleware(compiler, {
     publicPath: '/'
   }))

@@ -13,7 +13,8 @@
           <span>&nbsp;Add project</span>
         </v-btn>
         <SignInWithGithub
-          github_clientid="5c6f1bd40f1841f1674a"
+          :github_clientid="github_clientid"
+          :github_redirect_uri="github_redirect_uri"
           v-on:user-signed-in="onUserSignin"
           v-bind:logged_in_user="$root.$data.username"/>
         <LogoutButton v-if="$root.$data.isUserLoggedIn"/>
@@ -38,10 +39,14 @@ import ProjectAboutBox from '@/components/ProjectAboutBox'
 import SignInWithGithub from '@/components/SignInWithGithub'
 import LogoutButton from '@/components/LogoutButton'
 import CouponWallet from '@/components/CouponWallet'
+import { prod, dev } from '@/config.js'
+
+const config = process.env['NODE_ENV'] === "production" ? prod : dev
 
 export default {
   name: 'App',
   created() {
+    console.log(process.env['NODE_ENV'] === "production" ? "production!!!" : "development!@!@")
     let url = new URL(window.location)
     let hostname = "http://" + url.hostname + (url.port !== 80 ? `:${url.port}` : '')
   },
@@ -56,7 +61,9 @@ export default {
     return {
       username: null,
       frenchblog: {},
-      drawer: true
+      drawer: true,
+      github_clientid: config.github_clientid,
+      github_redirect_uri: config.github_redirect_uri
     }
   },
   props: {

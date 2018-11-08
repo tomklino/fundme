@@ -95,6 +95,7 @@ export default {
   },
   methods: {
     addProject: function({ name, description }) {
+      //// TODO: an error message should be displayed if mutations returns null
       console.log("Adding project", name)
       this.$apollo.mutate({
         mutation: PROJECT_MUTATION_CREATE,

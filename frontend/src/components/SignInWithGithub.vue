@@ -13,10 +13,12 @@
   export default {
     name: 'SignInWithGithub',
     mounted () {
+
       this.checkLogin();
     },
     props: [
       'github_clientid',
+      'github_redirect_uri',
       'logged_in_user'
     ],
     methods: {
@@ -41,7 +43,9 @@
       github_login_link: function() {
         return this.logged_in_user ?
           null :
-          `https://github.com/login/oauth/authorize?client_id=${this.github_clientid}`
+          'https://github.com/login/oauth/authorize' +
+          '?client_id=' + this.github_clientid +
+          (this.github_redirect_uri ? '&redirect_uri=' + this.github_redirect_uri : '')
       }
     }
   }
