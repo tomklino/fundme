@@ -43,7 +43,11 @@ if(config.get('FUNDME_DEV')) {
   })
 } else {
   console.log("PRODUCTION!")
-  const frontend_production_dir = path.join(__dirname, '/../frontend/dist');
+  const frontend_production_dir =
+    config.get('frontend_production_dir')[0] === '/' ?
+    config.get('frontend_production_dir') :
+    path.join(__dirname, config.get('frontend_production_dir'))
+
   const index_html_file = fs.readFileSync(path.join(frontend_production_dir, 'index.html'), 'utf8')
 
   app.use(express.static(frontend_production_dir));

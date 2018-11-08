@@ -6,11 +6,11 @@ module.exports = function configLoader({ home_dir = __dirname }) {
     .env('__')
 
   nconf.file('config', {
-    file: nconf.get('conf-file-location') || home_dir + '/config.json'
+    file: nconf.get('CONF_FILE') || home_dir + '/config.json'
   })
 
   nconf.file('secrets', {
-    file: nconf.get('secrets-file-location') || home_dir + '/secret_settings.json'
+    file: nconf.get('SECRETS_FILE') || home_dir + '/secret_settings.json'
   })
 
   nconf.file('defaults', {

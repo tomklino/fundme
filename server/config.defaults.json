@@ -3,6 +3,7 @@
   "user_handler_options": {
     "newUserGift": 0
   },
+  "frontend_production_dir": "../frontend/dist",
   "payment_gateway_url": "localhost:3001",
   "mysql": {
     "connectionLimit": "10",
