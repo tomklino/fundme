@@ -15,6 +15,9 @@ mysql_docker_image="lutraman/fundmedb"
 mysql_user="root"
 mysql_database="fundme"
 mysql_port="3306"
+frontend_listen_port="3002"
+fronend_docker_name="fundme_frontend"
+frontend_docker_image="fundme-frontend"
 app_listen_port="3000"
 
 os.chdir(base_dir)
@@ -28,14 +31,25 @@ with open(os.devnull, 'w') as FNULL:
         "-e", "MYSQL_ROOT_PASSWORD=" + mysql_password,
         "-d", mysql_docker_image], stdout=FNULL)
 
-container_data = json.loads(check_output(['docker', 'inspect', 'fundme-mysql']))[0]
-mysql_hostname = container_data["NetworkSettings"]["Networks"]["bridge"]["IPAddress"]
+mysql_container_data = json.loads(check_output(['docker', 'inspect', mysql_docker_name]))[0]
+mysql_hostname = mysql_container_data["NetworkSettings"]["Networks"]["bridge"]["IPAddress"]
+
+with open(os.devnull, 'w') as FNULL:
+    call(["docker", "run", "--name", fronend_docker_name,
+        "-e", "LISTEN_PORT=" + frontend_listen_port,
+        "--expose", frontend_listen_port,
+        "-d", frontend_docker_image], stdout=FNULL)
+
+frontend_container_data = json.loads(check_output(['docker', 'inspect', fronend_docker_name]))[0]
+fronend_hostname = frontend_container_data["NetworkSettings"]["Networks"]["bridge"]["IPAddress"]
+frontend_static_server = fronend_hostname + ":" + frontend_listen_port
 
 print "waiting for mysql server to be ready:"
 call([wait_for_connection_script, mysql_hostname, mysql_port])
 print "mysql server ready"
 
 resulted_config = {
+    "frontend_static_server": frontend_static_server,
     "mysql": {
         "host": mysql_hostname,
         "port": mysql_port,

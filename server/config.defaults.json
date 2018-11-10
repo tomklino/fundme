@@ -1,5 +1,6 @@
 {
-  "listen-port": "3000",
+  "listen_port": "3000",
+  "frontend_static_server": "localhost:3002",
   "user_handler_options": {
     "newUserGift": 0
   },
