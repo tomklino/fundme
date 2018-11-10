@@ -1,6 +1,4 @@
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
 const mysql = require('mysql2/promise');
 const graphqlHTTP = require('express-graphql');
 const cookieSession = require('cookie-session');
