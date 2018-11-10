@@ -42,6 +42,8 @@ if(config.get('FUNDME_DEV')) {
     app.use(loading_spot, proxy("localhost:3000/"))
   })
 } else {
+  //// TODO: frontend has been dockerized with its own server,
+  //         proxy to it instead of serving the files directly
   console.log("PRODUCTION!")
   const frontend_production_dir =
     config.get('frontend_production_dir')[0] === '/' ?
