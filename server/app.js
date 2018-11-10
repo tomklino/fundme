@@ -11,6 +11,14 @@ const githubLoginHandlerFactory = require('./project_modules/github_login.js');
 const walletFactory = require('./project_modules/wallet.js');
 const schema = require('./graphql/schema.js');
 
+process.on('SIGTERM', tearDown)
+process.on('SIGINT', tearDown)
+
+function tearDown() {
+  mysqlConnectionPool.end();
+  process.exit(0)
+}
+
 const configLoader = require('./config-loader.js')
 
 const config = configLoader({ home_dir: __dirname })
